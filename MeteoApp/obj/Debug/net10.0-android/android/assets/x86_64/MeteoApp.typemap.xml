@@ -1,0 +1,10 @@
+<api type="debug" assembly-name="MeteoApp" mvid="7a3b00c2586d446db8a682a1acb68684">
+  <java-to-managed>
+    <entry java-name="crc64fbf5db1d42117ee5/MainActivity" managed-name="MeteoApp.MainActivity, MeteoApp" managed-type-token-id="33554442" />
+    <entry java-name="crc64fbf5db1d42117ee5/MainApplication" managed-name="MeteoApp.MainApplication, MeteoApp" managed-type-token-id="33554443" />
+  </java-to-managed>
+  <managed-to-java>
+    <entry java-name="crc64fbf5db1d42117ee5/MainActivity" managed-name="MeteoApp.MainActivity, MeteoApp" managed-type-token-id="33554442" />
+    <entry java-name="crc64fbf5db1d42117ee5/MainApplication" managed-name="MeteoApp.MainApplication, MeteoApp" managed-type-token-id="33554443" />
+  </managed-to-java>
+</api>

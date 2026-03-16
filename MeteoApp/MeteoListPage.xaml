@@ -6,20 +6,86 @@
             <ToolbarItem Text="Add" Clicked="OnItemAdded" />
         </ContentPage.ToolbarItems>
 
-        <ListView x:Name="zlistView" Margin="20" ItemSelected="OnListItemSelected" ItemsSource="{Binding Entries}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout>
-                            <Label Text="{Binding Position}"></Label>
-                            <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+       
+            <CarouselView x:Name="zlistView" 
+                           Margin="20"
+                           ItemsSource="{Binding Entries}" 
+                           Grid.Row="0">
+
+                <CarouselView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                        SnapPointsType="MandatorySingle"
+                        SnapPointsAlignment="Start"/>
+                </CarouselView.ItemsLayout>
+
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                         <Grid RowDefinitions="50, *"
+                            Margin="5"
+                            BackgroundColor="#EEEEEE"
+                            ColumnDefinitions="80,*"
+                            HeightRequest="120">
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnListItemSelected"/>
+                            </Grid.GestureRecognizers>
+
+
+                            <Image Grid.Column="0"
+                                Grid.RowSpan="2"
+                                Source="dotnet_bot.svg"
+                                WidthRequest="80"
+                                HeightRequest="80"
+                                />
+
+
+                            <StackLayout Grid.Column="1"
+                                Orientation="Vertical"
+                                VerticalOptions="Center">
+
+                                <Label Text="{Binding Position}"
+                                    FontSize="20"
+                                    FontAttributes="Bold"/>
+
+                                <Label Text="{Binding Id}"
+                                    FontSize="32"/>
+
+                            </StackLayout>
+
+
+                            <!-- <Label Grid.Row="0" Text="{Binding Position}"></Label>
+                            
+                            <StackLayout Grid.Row="1" Margin="20,0,0,0" Orientation="Vertical" HorizontalOptions="FillAndExpand">
                                 <Label Text="{Binding Id}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
                                 <Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" />
+                            </StackLayout> -->
+                        </Grid>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+
+<!-- 
+            <ListView x:Name="zlistView" Margin="20" ItemSelected="OnListItemSelected" ItemsSource="{Binding Entries}" Grid.Row="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="{Binding Position}"></Label>
+                                <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                    <Label Text="{Binding Id}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
+                                    <Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" />
+                                </StackLayout>
                             </StackLayout>
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+             -->
+        </Grid>
     </ContentPage>
 </Shell>

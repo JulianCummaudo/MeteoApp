@@ -28,14 +28,16 @@ public partial class MeteoListPage : Shell
             Routing.RegisterRoute(item.Key, item.Value);
     }
 
-    private void OnListItemSelected(object sender, SelectedItemChangedEventArgs e)
+    // Modificata la firma del metodo per farlo funzionare con la carousel view
+    private void OnListItemSelected(object sender, TappedEventArgs e)
     {
-        if (e.SelectedItem is Entry entry)
+        if (sender is View view && view.BindingContext is Entry entry)
         {
             var navigationParameter = new Dictionary<string, object>
             {
                 { "Entry", entry }
             };
+
             Shell.Current.GoToAsync("entrydetails", navigationParameter);
         }
     }
@@ -91,10 +93,10 @@ public partial class MeteoListPage : Shell
                     "OK");
             }
 
-            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            permissions = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
         }
 
-        if (status == PermissionStatus.Granted)
+        if (permissions == PermissionStatus.Granted)
         {
             await ShareLocation();
         }

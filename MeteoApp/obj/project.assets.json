@@ -11009,26 +11009,26 @@
     ]
   },
   "packageFolders": {
-    "/Users/samuel/.nuget/packages/": {}
+    "/home/juj/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/samuel/Developer/MeteoApp/MeteoApp/MeteoApp-Maui.csproj",
+      "projectUniqueName": "/home/juj/Desktop/TerzoAnno/SecondoSemestre/Android/MeteoApp/MeteoApp/MeteoApp-Maui.csproj",
       "projectName": "MeteoApp",
-      "projectPath": "/Users/samuel/Developer/MeteoApp/MeteoApp/MeteoApp-Maui.csproj",
-      "packagesPath": "/Users/samuel/.nuget/packages/",
-      "outputPath": "/Users/samuel/Developer/MeteoApp/MeteoApp/obj/",
+      "projectPath": "/home/juj/Desktop/TerzoAnno/SecondoSemestre/Android/MeteoApp/MeteoApp/MeteoApp-Maui.csproj",
+      "packagesPath": "/home/juj/.nuget/packages/",
+      "outputPath": "/home/juj/Desktop/TerzoAnno/SecondoSemestre/Android/MeteoApp/MeteoApp/obj/",
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "configFilePaths": [
-        "/Users/samuel/.nuget/NuGet/NuGet.Config"
+        "/home/juj/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0-android"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
+        "/usr/share/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -11079,6 +11079,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[10.0.3, 10.0.3]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.Android": {
             "privateAssets": "all"
@@ -11090,7 +11096,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

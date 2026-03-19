@@ -1,8 +1,14 @@
-﻿namespace MeteoApp;
+﻿using System.Text.Json;
+using MeteoApp.Models;
+
+namespace MeteoApp;
 public partial class MeteoListPage : Shell
 {
     public Dictionary<string, Type> Routes { get; private set; } = new Dictionary<string, Type>();
-    public string Position { get; set; } = "";
+    public Location CurrentLocation { get; set; } = null;
+    private string METEO_API_URL = "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric&lang=it";
+    private static readonly HttpClient _httpClient = new HttpClient();
+    private const string API_KEY = "xxx";
 
     public MeteoListPage()
     {
@@ -49,7 +55,43 @@ public partial class MeteoListPage : Shell
 
     private async Task ShowPrompt()
     {
-        await this.DisplayAlert("Add City", "To Be Implemented", "OK");
+        if (CurrentLocation == null)
+        {
+            await this.DisplayAlert("Errore", "Posizione non disponibile.", "OK");
+            return;
+        }
+
+        string url = METEO_API_URL
+            .Replace("{lat}", CurrentLocation.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture))
+            .Replace("{lon}", CurrentLocation.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture))
+            .Replace("{api_key}", API_KEY);
+
+        try
+        {
+            var response = await _httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await this.DisplayAlert("Errore API", $"Codice: {(int)response.StatusCode}", "OK");
+                return;
+            }
+
+            string json = await response.Content.ReadAsStringAsync();
+            var meteo = JsonSerializer.Deserialize<MeteoResponse>(json);
+
+            // Debug temporaneo — con 2.5 i dati sono sulla root, non su .Current
+            await this.DisplayAlert(
+                meteo.CityName,
+                $"{meteo.Description}\n" +
+                $"Temp: {meteo.Main.Temp:F1}°C\n" +
+                $"Percepita: {meteo.Main.FeelsLike:F1}°C\n" +
+                $"Umidità: {meteo.Main.Humidity}%",
+                "OK");
+        }
+        catch (HttpRequestException ex)
+        {
+            await this.DisplayAlert("Errore di rete", ex.Message, "OK");
+        }
     }
 
     private async Task ShareLocation()
@@ -59,10 +101,14 @@ public partial class MeteoListPage : Shell
             var locationRequest = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(15));
             var location = await Geolocation.GetLocationAsync(locationRequest);
 
-            if (location is not null)
-                Position = $"{location.Latitude}; {location.Longitude}";
+            if (location != null)
+            {
+                CurrentLocation = location;
+            }
             else
-                await this.DisplayAlert("Location Error", "Unable to retrieve location.", "OK");
+            {
+                await this.DisplayAlert("Location Error", "Unable to retrieve location.", "OK");   
+            }
         }
         catch (FeatureNotEnabledException fne)
         {

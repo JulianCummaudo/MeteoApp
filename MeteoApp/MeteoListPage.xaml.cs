@@ -37,11 +37,11 @@ public partial class MeteoListPage : Shell
     // Modificata la firma del metodo per farlo funzionare con la carousel view
     private void OnListItemSelected(object sender, TappedEventArgs e)
     {
-        if (sender is View view && view.BindingContext is Entry entry)
+        if (sender is View view && view.BindingContext is CityEntry cityEntry)
         {
             var navigationParameter = new Dictionary<string, object>
             {
-                { "Entry", entry }
+                { "CityEntry", cityEntry }
             };
 
             Shell.Current.GoToAsync("entrydetails", navigationParameter);
@@ -79,14 +79,26 @@ public partial class MeteoListPage : Shell
             string json = await response.Content.ReadAsStringAsync();
             var meteo = JsonSerializer.Deserialize<MeteoResponse>(json);
 
-            // Debug temporaneo — con 2.5 i dati sono sulla root, non su .Current
-            await this.DisplayAlert(
+            // Chiedi conferma per salvare il paese nel database
+            bool confirmed = await this.DisplayAlert(
                 meteo.CityName,
                 $"{meteo.Description}\n" +
                 $"Temp: {meteo.Main.Temp:F1}°C\n" +
                 $"Percepita: {meteo.Main.FeelsLike:F1}°C\n" +
                 $"Umidità: {meteo.Main.Humidity}%",
-                "OK");
+                "Salva",
+                "Annulla");
+
+            if (confirmed)
+            {
+                // Salva il paese nel database
+                var viewModel = BindingContext as MeteoListViewModel;
+                if (viewModel != null)
+                {
+                    await viewModel.AddEntryAsync(meteo.CityName);
+                    await this.DisplayAlert("Successo", $"Posizione '{meteo.CityName}' salvata nel database.", "OK");
+                }
+            }
         }
         catch (HttpRequestException ex)
         {

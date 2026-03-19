@@ -1,7 +1,14 @@
-﻿namespace MeteoApp
+﻿using SQLite;
+
+namespace MeteoApp.Models
 {
-    public class Entry
+    [Table("cities")]
+    public class CityEntry
     {
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
+
+        [MaxLength(250)]
+        public string Country { get; set; }
     }
 }

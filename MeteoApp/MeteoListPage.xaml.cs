@@ -36,11 +36,11 @@ public partial class MeteoListPage : Shell
     // Modificata la firma del metodo per farlo funzionare con la carousel view
     private void OnListItemSelected(object sender, TappedEventArgs e)
     {
-        if (sender is View view && view.BindingContext is Entry entry)
+        if (sender is View view && view.BindingContext is CityEntry cityEntry)
         {
             var navigationParameter = new Dictionary<string, object>
             {
-                { "Entry", entry }
+                { "CityEntry", cityEntry }
             };
 
             Shell.Current.GoToAsync("entrydetails", navigationParameter);

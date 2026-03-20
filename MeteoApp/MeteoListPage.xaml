@@ -48,12 +48,12 @@
                                 Orientation="Vertical"
                                 VerticalOptions="Center">
 
-                                <Label Text="{Binding Position}"
+                                <Label Text="{Binding Country}"
                                     FontSize="20"
                                     FontAttributes="Bold"/>
 
-                                <Label Text="{Binding Id}"
-                                    FontSize="32"/>
+                                <Label Text="{Binding Id, StringFormat='ID: {0}'}"
+                                    FontSize="14"/>
 
                             </StackLayout>
 

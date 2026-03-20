@@ -80,4 +80,8 @@
 	    <DependentUpon>MeteoListPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="secrets.env" />
+	</ItemGroup>
 </Project>

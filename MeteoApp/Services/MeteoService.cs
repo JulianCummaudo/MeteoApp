@@ -9,7 +9,7 @@ class MeteoService
     private static readonly string OWM_URL_KEY = "OWM_URL";
     private static readonly string OWM_API_KEY = "OWM_API_KEY";
 
-    public async Task<MeteoResponse> GetConditionsForLocation(Location location)
+    public async Task<MeteoResponse> GetConditionsAsync(Location location)
     {
         string owmUrl = SecretsService.Get(OWM_URL_KEY);
         string owmApiKey = SecretsService.Get(OWM_API_KEY);

@@ -60,7 +60,7 @@ public partial class MeteoListPage : Shell
             return;
         }
 
-        MeteoResponse meteo = await _meteoService.GetConditionsForLocation(CurrentLocation);
+        MeteoResponse meteo = await _meteoService.GetConditionsAsync(CurrentLocation);
 
         if (meteo == null)
         {

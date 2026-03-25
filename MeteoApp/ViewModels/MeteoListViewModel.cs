@@ -51,15 +51,13 @@ namespace MeteoApp
         /// <summary>
         /// Aggiunge una nuova entry al database e la collezione
         /// </summary>
-        public async Task AddEntryAsync(string country)
+        // Sostituisci il metodo AddEntryAsync esistente
+        public async Task AddEntryAsync(CityEntry entry)
         {
             try
             {
-                var newEntry = new CityEntry { Country = country };
-                await _databaseService.AddEntryAsync(newEntry);
-                
-                // Ricarica le entry dal database per assicurarti di avere l'ID generato
-                await LoadEntriesFromDatabaseAsync();
+                await _databaseService.AddEntryAsync(entry);
+                await LoadEntriesFromDatabaseAsync(); // ricarica con l'ID generato dal DB
             }
             catch (Exception ex)
             {

@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
-using MeteoApp.Models;
+﻿using MeteoApp.Models;
 using MeteoApp.Services;
 
 namespace MeteoApp;
+
 public partial class MeteoListPage : Shell
 {
     public Dictionary<string, Type> Routes { get; private set; } = new Dictionary<string, Type>();
@@ -13,14 +13,19 @@ public partial class MeteoListPage : Shell
     {
         InitializeComponent();
         RegisterRoutes();
+
         BindingContext = new MeteoListViewModel();
+
+        AddCityPage.CitySelected += async (entry) =>
+        {
+            if (BindingContext is MeteoListViewModel vm)
+                await vm.AddEntryAsync(entry);
+        };
     }
 
     protected override void OnHandlerChanged()
     {
         base.OnHandlerChanged();
-
-        // Garantisce il controllo sul thread della UI
         if (Handler != null)
             Dispatcher.Dispatch(() => _ = CheckLocationPermissions());
     }
@@ -28,12 +33,12 @@ public partial class MeteoListPage : Shell
     private void RegisterRoutes()
     {
         Routes.Add("entrydetails", typeof(MeteoItemPage));
+        Routes.Add("addcity", typeof(AddCityPage));
 
         foreach (var item in Routes)
             Routing.RegisterRoute(item.Key, item.Value);
     }
 
-    // Modificata la firma del metodo per farlo funzionare con la carousel view
     private void OnListItemSelected(object sender, TappedEventArgs e)
     {
         if (sender is View view && view.BindingContext is CityEntry cityEntry)
@@ -42,7 +47,6 @@ public partial class MeteoListPage : Shell
             {
                 { "CityEntry", cityEntry }
             };
-
             Shell.Current.GoToAsync("entrydetails", navigationParameter);
         }
     }
@@ -54,17 +58,16 @@ public partial class MeteoListPage : Shell
 
     private async Task ShowPrompt()
     {
-        if (CurrentLocation == null)
-        {
-            await this.DisplayAlert("Errore", "Posizione non disponibile.", "OK");
-            return;
-        }
+        await Shell.Current.GoToAsync("addcity");
+    }
 
-        MeteoResponse meteo = await _meteoService.GetConditionsAsync(CurrentLocation);
+    private async Task FetchAndShowMeteo(Location location)
+    {
+        MeteoResponse meteo = await _meteoService.GetConditionsAsync(location);
 
         if (meteo == null)
         {
-            this.DisplayAlert("Errore", "Sì è verificato un errore inaspettato, riprova più tardi", "OK");
+            await this.DisplayAlert("Errore", "Si è verificato un errore inaspettato, riprova più tardi.", "OK");
             return;
         }
 
@@ -75,7 +78,6 @@ public partial class MeteoListPage : Shell
             $"Percepita: {meteo.Main.FeelsLike:F1}°C\n" +
             $"Umidità: {meteo.Main.Humidity}%",
             "OK");
-        
     }
 
     private async Task ShareLocation()
@@ -86,19 +88,15 @@ public partial class MeteoListPage : Shell
             var location = await Geolocation.GetLocationAsync(locationRequest);
 
             if (location != null)
-            {
                 CurrentLocation = location;
-            }
             else
-            {
-                await this.DisplayAlert("Location Error", "Unable to retrieve location.", "OK");   
-            }
+                await this.DisplayAlert("Location Error", "Unable to retrieve location.", "OK");
         }
-        catch (FeatureNotEnabledException fne)
+        catch (FeatureNotEnabledException)
         {
             await this.DisplayAlert("GPS Disabled", "Please enable GPS in device settings.", "OK");
         }
-        catch (PermissionException pe)
+        catch (PermissionException)
         {
             await this.DisplayAlert("Permission Denied", "Location permission was denied.", "OK");
         }
@@ -114,7 +112,6 @@ public partial class MeteoListPage : Shell
 
         if (permissions != PermissionStatus.Granted)
         {
-            // Serve per la UI di Android
             if (Permissions.ShouldShowRationale<Permissions.LocationWhenInUse>())
             {
                 await this.DisplayAlert(
@@ -122,14 +119,11 @@ public partial class MeteoListPage : Shell
                     "This app needs your location to show local weather.",
                     "OK");
             }
-
             permissions = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
         }
 
         if (permissions == PermissionStatus.Granted)
-        {
             await ShareLocation();
-        }
         else
         {
             var message = (DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.MacCatalyst)

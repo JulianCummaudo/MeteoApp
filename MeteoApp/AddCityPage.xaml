@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MeteoApp.AddCityPage"
+             Title="Aggiungi città">
+    <VerticalStackLayout Padding="24" Spacing="16">
+        <Label Text="Cerca una città" FontSize="20" FontAttributes="Bold"/>
+        <Entry x:Name="CityEntry"
+               Placeholder="es. Lu, Lon, Ber..."
+               TextChanged="OnTextChanged"/>
+        <ActivityIndicator x:Name="Loader"
+                           IsRunning="False"
+                           IsVisible="False"/>
+        <ListView x:Name="ResultsList"
+                  IsVisible="False"
+                  ItemSelected="OnItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Name}"
+                              Detail="{Binding DisplayName}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
+</ContentPage>

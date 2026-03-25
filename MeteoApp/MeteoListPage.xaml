@@ -1,91 +1,65 @@
 ﻿<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MeteoApp.MeteoListPage">
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       x:Class="MeteoApp.MeteoListPage">
     <ContentPage>
         <ContentPage.ToolbarItems>
             <ToolbarItem Text="Add" Clicked="OnItemAdded" />
         </ContentPage.ToolbarItems>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-       
-            <CarouselView x:Name="zlistView" 
-                           Margin="20"
-                           ItemsSource="{Binding Entries}" 
-                           Grid.Row="0">
+        <CollectionView x:Name="zlistView"
+                        Margin="16"
+                        ItemsSource="{Binding Entries}"
+                        ItemsUpdatingScrollMode="KeepItemsInView">
 
-                <CarouselView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical"
-                        SnapPointsType="MandatorySingle"
-                        SnapPointsAlignment="Start"/>
-                </CarouselView.ItemsLayout>
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="12"/>
+            </CollectionView.ItemsLayout>
 
-                <CarouselView.ItemTemplate>
-                    <DataTemplate>
-                         <Grid RowDefinitions="50, *"
-                            Margin="5"
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Stroke="Transparent"
+                            StrokeShape="RoundRectangle 12"
                             BackgroundColor="#EEEEEE"
-                            ColumnDefinitions="80,*"
-                            HeightRequest="120">
+                            Padding="16"
+                            HeightRequest="90">
+
+                        <Grid ColumnDefinitions="64, *, Auto">
 
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnListItemSelected"/>
                             </Grid.GestureRecognizers>
 
-
                             <Image Grid.Column="0"
-                                Grid.RowSpan="2"
                                 Source="dotnet_bot.svg"
-                                WidthRequest="80"
-                                HeightRequest="80"
-                                />
-
+                                WidthRequest="48"
+                                HeightRequest="48"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"/>
 
                             <StackLayout Grid.Column="1"
-                                Orientation="Vertical"
-                                VerticalOptions="Center">
-
-                                <Label Text="{Binding Country}"
-                                    FontSize="20"
+                                        Orientation="Vertical"
+                                        VerticalOptions="Center"
+                                        Margin="12,0,0,0">
+                                <Label Text="{Binding City.Name}"
+                                    FontSize="18"
                                     FontAttributes="Bold"/>
-
-                                <Label Text="{Binding Id, StringFormat='ID: {0}'}"
-                                    FontSize="14"/>
-
+                                <Label Text="{Binding City.Country}"
+                                    FontSize="13"
+                                    TextColor="#888888"/>
                             </StackLayout>
 
-
-                            <!-- <Label Grid.Row="0" Text="{Binding Position}"></Label>
-                            
-                            <StackLayout Grid.Row="1" Margin="20,0,0,0" Orientation="Vertical" HorizontalOptions="FillAndExpand">
-                                <Label Text="{Binding Id}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                                <Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" />
-                            </StackLayout> -->
+                            <Label Grid.Column="2"
+                                Text="{Binding Meteo.Main.Temp, StringFormat='{0:F1}°C'}"
+                                FontSize="22"
+                                FontAttributes="Bold"
+                                VerticalOptions="Center"
+                                HorizontalOptions="End"/>
                         </Grid>
-                    </DataTemplate>
-                </CarouselView.ItemTemplate>
-            </CarouselView>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-<!-- 
-            <ListView x:Name="zlistView" Margin="20" ItemSelected="OnListItemSelected" ItemsSource="{Binding Entries}" Grid.Row="0">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout>
-                                <Label Text="{Binding Position}"></Label>
-                                <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                                    <Label Text="{Binding Id}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                                    <Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" />
-                                </StackLayout>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-             -->
-        </Grid>
     </ContentPage>
 </Shell>

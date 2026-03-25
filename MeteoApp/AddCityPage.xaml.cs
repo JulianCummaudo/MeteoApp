@@ -45,7 +45,7 @@ public partial class AddCityPage : ContentPage
             Loader.IsVisible = false;
 
             ResultsList.ItemsSource = results;
-            ResultsList.IsVisible = results.Any();
+            ResultsList.IsVisible = results.Count != 0;
         }
         catch (TaskCanceledException tce) {}
     }
@@ -53,8 +53,6 @@ public partial class AddCityPage : ContentPage
     private async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem is not GeolocationResult selected) return;
-
-        System.Diagnostics.Debug.WriteLine($">>> Navigando con: lat={selected.Lat}, lon={selected.Lon}");
 
         CitySelected?.Invoke(new CityEntry
         {

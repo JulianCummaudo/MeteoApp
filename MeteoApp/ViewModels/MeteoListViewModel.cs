@@ -6,10 +6,11 @@ namespace MeteoApp
 {
     public class MeteoListViewModel : BaseViewModel
     {
-        private DatabaseService _databaseService;
-        ObservableCollection<CityEntry> _entries;
+        private readonly DatabaseService _databaseService;
+        private readonly MeteoService _meteoService;
+        private ObservableCollection<MeteoCityEntry> _entries;
 
-        public ObservableCollection<CityEntry> Entries
+        public ObservableCollection<MeteoCityEntry> Entries
         {
             get { return _entries; }
             set
@@ -21,14 +22,12 @@ namespace MeteoApp
 
         public MeteoListViewModel()
         {
-            Entries = new ObservableCollection<CityEntry>();
+            Entries = new ObservableCollection<MeteoCityEntry>();
             _databaseService = new DatabaseService();
+            _meteoService = new MeteoService();
             _ = LoadEntriesFromDatabaseAsync();
         }
 
-        /// <summary>
-        /// Carica tutte le entry dal database e le aggiunge alla collezione
-        /// </summary>
         private async Task LoadEntriesFromDatabaseAsync()
         {
             try
@@ -37,10 +36,26 @@ namespace MeteoApp
                 var entries = await _databaseService.GetAllEntriesAsync();
                 
                 Entries.Clear();
-                foreach (var entry in entries)
+
+                for (int i = 0; i < entries.Count; i++)
+                {
+                    var entry = entries[i];
+                    var location = new Location(entry.Lat, entry.Lon);
+                    var meteo = await _meteoService.GetConditionsAsync(location);
+
+                    var meteoCityEntry = new MeteoCityEntry
+                    {
+                        City = entry,
+                        Meteo = meteo
+                    };
+
+                    Entries.Add(meteoCityEntry);
+                }
+
+                /*foreach (var entry in entries)
                 {
                     Entries.Add(entry);
-                }
+                }*/
             }
             catch (Exception ex)
             {
@@ -48,16 +63,12 @@ namespace MeteoApp
             }
         }
 
-        /// <summary>
-        /// Aggiunge una nuova entry al database e la collezione
-        /// </summary>
-        // Sostituisci il metodo AddEntryAsync esistente
         public async Task AddEntryAsync(CityEntry entry)
         {
             try
             {
                 await _databaseService.AddEntryAsync(entry);
-                await LoadEntriesFromDatabaseAsync(); // ricarica con l'ID generato dal DB
+                await LoadEntriesFromDatabaseAsync();
             }
             catch (Exception ex)
             {

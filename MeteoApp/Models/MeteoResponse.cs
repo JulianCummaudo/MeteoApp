@@ -17,7 +17,7 @@ public class MeteoResponse
     public int Visibility { get; set; }
 
     [JsonPropertyName("name")]
-    public string CityName { get; set; }  // bonus: ritorna il nome della città!
+    public string CityName { get; set; }
 
     [JsonPropertyName("dt")]
     public long Dt { get; set; }

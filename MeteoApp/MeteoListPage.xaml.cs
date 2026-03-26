@@ -1,4 +1,5 @@
-﻿using MeteoApp.Models;
+﻿using System.Text.Json;
+using MeteoApp.Models;
 using MeteoApp.Services;
 
 namespace MeteoApp;
@@ -23,6 +24,15 @@ public partial class MeteoListPage : Shell
         };
     }
 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        
+        // Ricarica i dati dal database ogni volta che la pagina appare
+        if (BindingContext is MeteoListViewModel vm)
+            await vm.RefreshEntriesAsync();
+    }
+
     protected override void OnHandlerChanged()
     {
         base.OnHandlerChanged();
@@ -41,11 +51,12 @@ public partial class MeteoListPage : Shell
 
     private void OnListItemSelected(object sender, TappedEventArgs e)
     {
-        if (sender is View view && view.BindingContext is CityEntry cityEntry)
+        Console.WriteLine("Item tapped");
+        if (sender is View view && view.BindingContext is MeteoCityEntry meteoCityEntry)
         {
             var navigationParameter = new Dictionary<string, object>
             {
-                { "CityEntry", cityEntry }
+                { "CityEntry", meteoCityEntry }
             };
             Shell.Current.GoToAsync("entrydetails", navigationParameter);
         }

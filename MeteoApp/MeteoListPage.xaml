@@ -1,6 +1,11 @@
 ﻿<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:converters="clr-namespace:MeteoApp.Converters"
        x:Class="MeteoApp.MeteoListPage">
+    <Shell.Resources>
+        <converters:WeatherIconConverter x:Key="WeatherIconConverter" />
+    </Shell.Resources>
+    
     <ContentPage>
         <ContentPage.ToolbarItems>
             <ToolbarItem Text="Add" Clicked="OnItemAdded" />
@@ -31,7 +36,7 @@
                             </Grid.GestureRecognizers>
 
                             <Image Grid.Column="0"
-                                Source="dotnet_bot.svg"
+                                Source="{Binding Meteo.IconUrl, Converter={StaticResource WeatherIconConverter}}"
                                 WidthRequest="48"
                                 HeightRequest="48"
                                 VerticalOptions="Center"

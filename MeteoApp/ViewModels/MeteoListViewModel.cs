@@ -63,6 +63,11 @@ namespace MeteoApp
             }
         }
 
+        public async Task RefreshEntriesAsync()
+        {
+            await LoadEntriesFromDatabaseAsync();
+        }
+
         public async Task AddEntryAsync(CityEntry entry)
         {
             try

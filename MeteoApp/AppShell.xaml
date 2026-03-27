@@ -4,6 +4,7 @@
        x:Class="MeteoApp.AppShell">
     <TabBar>
         <ShellContent Title="Home" Icon="dotnet_bot.svg" ContentTemplate="{DataTemplate local:MeteoListPage}" />
+        <ShellContent Title="Current Location" Icon="dotnet_bot.svg" ContentTemplate="{DataTemplate local:CurrentLocationPage}" />
         <ShellContent Title="Empty" Icon="dotnet_bot.svg" ContentTemplate="{DataTemplate local:EmptyPage}" />
     </TabBar>
     

@@ -29,6 +29,14 @@ public class DatabaseService
         return await _database.Table<CityEntry>().ToListAsync();
     }
 
+    public async Task<CityEntry> GetEntryByLocationAsync(Location location)
+    {
+        if (_database == null)
+            await InitAsync();
+
+        return await _database.Table<CityEntry>().FirstOrDefaultAsync(e => e.Lat == location.Latitude && e.Lon == location.Longitude);
+    }
+
     public async Task<bool> ExistsEntryAsync(string name)
     {
         if (_database == null)

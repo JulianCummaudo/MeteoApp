@@ -25,7 +25,6 @@ namespace MeteoApp
             Entries = new ObservableCollection<MeteoCityEntry>();
             _databaseService = new DatabaseService();
             _meteoService = new MeteoService();
-            //_ = LoadEntriesFromDatabaseAsync();
         }
 
         private async Task LoadEntriesFromDatabaseAsync()

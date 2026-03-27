@@ -68,16 +68,25 @@ namespace MeteoApp
             await LoadEntriesFromDatabaseAsync();
         }
 
-        public async Task AddEntryAsync(CityEntry entry)
+        public async Task<bool> AddEntryAsync(CityEntry entry)
         {
             try
             {
+                var existsEntry = await _databaseService.ExistsEntryAsync(entry.Name);
+
+                if (existsEntry)
+                    return false;
+
+
                 await _databaseService.AddEntryAsync(entry);
                 await LoadEntriesFromDatabaseAsync();
+
+                return true;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Errore nell'aggiunta dell'entry: {ex.Message}");
+                return false;
             }
         }
     }

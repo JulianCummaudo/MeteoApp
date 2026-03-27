@@ -54,13 +54,24 @@ public partial class AddCityPage : ContentPage
     {
         if (e.SelectedItem is not GeolocationResult selected) return;
 
-        CitySelected?.Invoke(new CityEntry
+        var city = new CityEntry
         {
             Name = selected.Name,
             Country = selected.Country ?? "",
             Lat = selected.Lat,
             Lon = selected.Lon
-        });
+        };
+
+
+        if (BindingContext is not MeteoListViewModel viewModel) return;
+
+        var success = await viewModel.AddEntryAsync(city);
+
+        if (!success)
+        {
+            await DisplayAlert("Errore", "Questa città è già presente", "OK");
+            return;
+        }
 
         await Shell.Current.GoToAsync("..");
     }

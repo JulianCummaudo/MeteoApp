@@ -29,6 +29,16 @@ public class DatabaseService
         return await _database.Table<CityEntry>().ToListAsync();
     }
 
+    public async Task<bool> ExistsEntryAsync(string name)
+    {
+        if (_database == null)
+            await InitAsync();
+
+        var entry = await _database.Table<CityEntry>().FirstOrDefaultAsync(e => e.Name == name);
+
+        return entry != null;
+    }
+
     public async Task<int> AddEntryAsync(CityEntry entry)
     {
         if (_database == null)

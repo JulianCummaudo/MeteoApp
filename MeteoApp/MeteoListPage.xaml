@@ -1,21 +1,27 @@
-﻿<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:converters="clr-namespace:MeteoApp.Converters"
-       x:Class="MeteoApp.MeteoListPage">
-    <Shell.Resources>
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:MeteoApp.Converters"
+             x:Class="MeteoApp.MeteoListPage"
+             Title="Meteo List">
+
+    <ContentPage.Resources>
         <converters:WeatherIconConverter x:Key="WeatherIconConverter" />
-    </Shell.Resources>
+    </ContentPage.Resources>
     
-    <ContentPage>
-        <ContentPage.ToolbarItems>
-            <ToolbarItem Text="Add" Clicked="OnItemAdded" />
-        </ContentPage.ToolbarItems>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Clicked="OnItemAdded" />
+    </ContentPage.ToolbarItems>
 
         <CollectionView x:Name="zlistView"
                         Margin="16"
                         ItemsSource="{Binding Entries}"
                         ItemsUpdatingScrollMode="KeepItemsInView">
-
+            <Label Text="No cities added yet"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   IsVisible="{Binding Entries.Count, Converter={StaticResource EmptyListToBooleanConverter}}"/>
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Vertical"
                                    ItemSpacing="12"/>
@@ -67,4 +73,3 @@
         </CollectionView>
 
     </ContentPage>
-</Shell>

@@ -5,28 +5,17 @@ using MeteoApp.Services;
 
 namespace MeteoApp;
 
-public partial class MeteoListPage : Shell
+public partial class MeteoListPage : ContentPage
 {
-    public Dictionary<string, Type> Routes { get; private set; } = new Dictionary<string, Type>();
     public Location CurrentLocation { get; set; } = null;
     private readonly MeteoService _meteoService = new MeteoService();
 
     public MeteoListPage()
     {
-        InitializeComponent();
-        RegisterRoutes();
-
-        Navigated += OnShellNavigated;
+        //InitializeComponent();
+        //RegisterRoutes();
 
         BindingContext = new MeteoListViewModel();
-    }
-
-    private async void OnShellNavigated(object? sender, ShellNavigatedEventArgs e)
-    {
-        if(e.Source == ShellNavigationSource.PopToRoot)
-        {
-            var a = 2;
-        }
     }
 
 
@@ -48,14 +37,14 @@ public partial class MeteoListPage : Shell
             Dispatcher.Dispatch(() => _ = CheckLocationPermissions());
     }
 
-    private void RegisterRoutes()
-    {
-        Routes.Add("entrydetails", typeof(MeteoItemPage));
-        Routes.Add("addcity", typeof(AddCityPage));
+    // private void RegisterRoutes()
+    // {
+    //     Routes.Add("entrydetails", typeof(MeteoItemPage));
+    //     Routes.Add("addcity", typeof(AddCityPage));
 
-        foreach (var item in Routes)
-            Routing.RegisterRoute(item.Key, item.Value);
-    }
+    //     foreach (var item in Routes)
+    //         Routing.RegisterRoute(item.Key, item.Value);
+    // }
 
     private void OnListItemSelected(object sender, TappedEventArgs e)
     {

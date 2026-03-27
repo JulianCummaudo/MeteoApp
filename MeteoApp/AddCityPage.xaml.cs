@@ -5,7 +5,6 @@ namespace MeteoApp;
 
 public partial class AddCityPage : ContentPage
 {
-    public static event Action<CityEntry> CitySelected;
     private static readonly int RESULT_LIMIT = 5;
     private readonly GeolocationService _geolocationService = new GeolocationService();
     private CancellationTokenSource _debounceCts;
@@ -73,6 +72,6 @@ public partial class AddCityPage : ContentPage
             return;
         }
 
-        await Shell.Current.GoToAsync("..");
+        await Shell.Current.GoToAsync("..", success);
     }
 }

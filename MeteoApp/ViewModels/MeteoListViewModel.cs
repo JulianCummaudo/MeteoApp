@@ -25,7 +25,7 @@ namespace MeteoApp
             Entries = new ObservableCollection<MeteoCityEntry>();
             _databaseService = new DatabaseService();
             _meteoService = new MeteoService();
-            _ = LoadEntriesFromDatabaseAsync();
+            //_ = LoadEntriesFromDatabaseAsync();
         }
 
         private async Task LoadEntriesFromDatabaseAsync()
@@ -34,6 +34,7 @@ namespace MeteoApp
             {
                 await _databaseService.InitAsync();
                 var entries = await _databaseService.GetAllEntriesAsync();
+                var tmpEntries = new List<MeteoCityEntry>();
                 
                 Entries.Clear();
 
@@ -49,13 +50,13 @@ namespace MeteoApp
                         Meteo = meteo
                     };
 
-                    Entries.Add(meteoCityEntry);
+                    tmpEntries.Add(meteoCityEntry);
                 }
 
-                /*foreach (var entry in entries)
+                foreach (var entry in tmpEntries)
                 {
                     Entries.Add(entry);
-                }*/
+                }
             }
             catch (Exception ex)
             {
@@ -77,9 +78,7 @@ namespace MeteoApp
                 if (existsEntry)
                     return false;
 
-
                 await _databaseService.AddEntryAsync(entry);
-                await LoadEntriesFromDatabaseAsync();
 
                 return true;
             }

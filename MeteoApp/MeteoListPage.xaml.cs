@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Android.Telephony;
 using MeteoApp.Models;
 using MeteoApp.Services;
 
@@ -15,14 +16,19 @@ public partial class MeteoListPage : Shell
         InitializeComponent();
         RegisterRoutes();
 
-        BindingContext = new MeteoListViewModel();
+        Navigated += OnShellNavigated;
 
-        AddCityPage.CitySelected += async (entry) =>
-        {
-            if (BindingContext is MeteoListViewModel vm)
-                await vm.AddEntryAsync(entry);
-        };
+        BindingContext = new MeteoListViewModel();
     }
+
+    private async void OnShellNavigated(object? sender, ShellNavigatedEventArgs e)
+    {
+        if(e.Source == ShellNavigationSource.PopToRoot)
+        {
+            var a = 2;
+        }
+    }
+
 
     protected override async void OnAppearing()
     {
@@ -32,6 +38,8 @@ public partial class MeteoListPage : Shell
         if (BindingContext is MeteoListViewModel vm)
             await vm.RefreshEntriesAsync();
     }
+
+
 
     protected override void OnHandlerChanged()
     {
@@ -51,13 +59,13 @@ public partial class MeteoListPage : Shell
 
     private void OnListItemSelected(object sender, TappedEventArgs e)
     {
-        Console.WriteLine("Item tapped");
         if (sender is View view && view.BindingContext is MeteoCityEntry meteoCityEntry)
         {
             var navigationParameter = new Dictionary<string, object>
             {
                 { "CityEntry", meteoCityEntry }
             };
+            
             Shell.Current.GoToAsync("entrydetails", navigationParameter);
         }
     }

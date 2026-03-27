@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using Android.Telephony;
-using MeteoApp.Models;
+﻿using MeteoApp.Models;
 using MeteoApp.Services;
 
 namespace MeteoApp;
@@ -12,22 +10,18 @@ public partial class MeteoListPage : ContentPage
 
     public MeteoListPage()
     {
-        //InitializeComponent();
-        //RegisterRoutes();
+        InitializeComponent();
 
         BindingContext = new MeteoListViewModel();
     }
-
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         
-        // Ricarica i dati dal database ogni volta che la pagina appare
         if (BindingContext is MeteoListViewModel vm)
             await vm.RefreshEntriesAsync();
     }
-
 
 
     protected override void OnHandlerChanged()
@@ -36,15 +30,6 @@ public partial class MeteoListPage : ContentPage
         if (Handler != null)
             Dispatcher.Dispatch(() => _ = CheckLocationPermissions());
     }
-
-    // private void RegisterRoutes()
-    // {
-    //     Routes.Add("entrydetails", typeof(MeteoItemPage));
-    //     Routes.Add("addcity", typeof(AddCityPage));
-
-    //     foreach (var item in Routes)
-    //         Routing.RegisterRoute(item.Key, item.Value);
-    // }
 
     private void OnListItemSelected(object sender, TappedEventArgs e)
     {
@@ -59,33 +44,9 @@ public partial class MeteoListPage : ContentPage
         }
     }
 
-    private void OnItemAdded(object sender, EventArgs e)
-    {
-        _ = ShowPrompt();
-    }
-
-    private async Task ShowPrompt()
+    private async void OnItemAdded(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("addcity");
-    }
-
-    private async Task FetchAndShowMeteo(Location location)
-    {
-        MeteoResponse meteo = await _meteoService.GetConditionsAsync(location);
-
-        if (meteo == null)
-        {
-            await this.DisplayAlert("Errore", "Si è verificato un errore inaspettato, riprova più tardi.", "OK");
-            return;
-        }
-
-        await this.DisplayAlert(
-            meteo.CityName,
-            $"{meteo.Description}\n" +
-            $"Temp: {meteo.Main.Temp:F1}°C\n" +
-            $"Percepita: {meteo.Main.FeelsLike:F1}°C\n" +
-            $"Umidità: {meteo.Main.Humidity}%",
-            "OK");
     }
 
     private async Task ShareLocation()

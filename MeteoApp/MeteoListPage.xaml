@@ -1,8 +1,7 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:MeteoApp.Converters"
-             x:Class="MeteoApp.MeteoListPage"
-             Title="Meteo List">
+             x:Class="MeteoApp.MeteoListPage">
 
     <ContentPage.Resources>
         <converters:WeatherIconConverter x:Key="WeatherIconConverter" />
@@ -12,16 +11,20 @@
         <ToolbarItem Text="Add" Clicked="OnItemAdded" />
     </ContentPage.ToolbarItems>
 
+    <Grid>
+
+        <Label Text="No cities added yet"
+               FontSize="18"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               IsVisible="{Binding Entries.Count, Converter={StaticResource EmptyListToBooleanConverter}}"/>
+
         <CollectionView x:Name="zlistView"
                         Margin="16"
                         ItemsSource="{Binding Entries}"
                         ItemsUpdatingScrollMode="KeepItemsInView">
-            <Label Text="No cities added yet"
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   IsVisible="{Binding Entries.Count, Converter={StaticResource EmptyListToBooleanConverter}}"/>
+
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Vertical"
                                    ItemSpacing="12"/>
@@ -42,34 +45,37 @@
                             </Grid.GestureRecognizers>
 
                             <Image Grid.Column="0"
-                                Source="{Binding Meteo.IconUrl, Converter={StaticResource WeatherIconConverter}}"
-                                WidthRequest="48"
-                                HeightRequest="48"
-                                VerticalOptions="Center"
-                                HorizontalOptions="Center"/>
+                                   Source="{Binding Meteo.IconUrl, Converter={StaticResource WeatherIconConverter}}"
+                                   WidthRequest="48"
+                                   HeightRequest="48"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
 
                             <StackLayout Grid.Column="1"
-                                        Orientation="Vertical"
-                                        VerticalOptions="Center"
-                                        Margin="12,0,0,0">
+                                         Orientation="Vertical"
+                                         VerticalOptions="Center"
+                                         Margin="12,0,0,0">
                                 <Label Text="{Binding City.Name}"
-                                    FontSize="18"
-                                    FontAttributes="Bold"/>
+                                       FontSize="18"
+                                       FontAttributes="Bold"/>
                                 <Label Text="{Binding City.Country}"
-                                    FontSize="13"
-                                    TextColor="#888888"/>
+                                       FontSize="13"
+                                       TextColor="#888888"/>
                             </StackLayout>
 
                             <Label Grid.Column="2"
-                                Text="{Binding Meteo.Main.Temp, StringFormat='{0:F1}°C'}"
-                                FontSize="22"
-                                FontAttributes="Bold"
-                                VerticalOptions="Center"
-                                HorizontalOptions="End"/>
+                                   Text="{Binding Meteo.Main.Temp, StringFormat='{0:F1}°C'}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+
         </CollectionView>
 
-    </ContentPage>
+    </Grid>
+
+</ContentPage>

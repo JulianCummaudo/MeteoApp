@@ -8,10 +8,13 @@ public partial class AddCityPage : ContentPage
     private static readonly int RESULT_LIMIT = 5;
     private readonly GeolocationService _geolocationService = new GeolocationService();
     private CancellationTokenSource _debounceCts;
+    private MeteoListViewModel _viewModel;
 
     public AddCityPage()
     {
         InitializeComponent();
+        _viewModel = new MeteoListViewModel();
+        BindingContext = _viewModel;
     }
 
     private async void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -62,7 +65,8 @@ public partial class AddCityPage : ContentPage
         };
 
 
-        if (BindingContext is not MeteoListViewModel viewModel) return;
+        if (BindingContext is not MeteoListViewModel viewModel)
+            return;
 
         var success = await viewModel.AddEntryAsync(city);
 

@@ -9,7 +9,6 @@ public partial class CurrentLocationPage : ContentPage
     public CurrentLocationPage()
     {
         InitializeComponent();
-        
         _viewModel = new CurrentLocationViewModel();
         BindingContext = _viewModel;
     }

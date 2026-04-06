@@ -7,12 +7,13 @@ public partial class MeteoListPage : ContentPage
 {
     public Location CurrentLocation { get; set; } = null;
     private readonly MeteoService _meteoService = new MeteoService();
+    private MeteoListViewModel _viewModel;
 
     public MeteoListPage()
     {
         InitializeComponent();
-
-        BindingContext = new MeteoListViewModel();
+        _viewModel = new MeteoListViewModel();
+        BindingContext = _viewModel;
     }
 
     protected override async void OnAppearing()

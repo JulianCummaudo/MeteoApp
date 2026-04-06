@@ -62,7 +62,11 @@ public partial class AddCityPage : ContentPage
         };
 
 
-        if (BindingContext is not MeteoListViewModel viewModel) return;
+        if (BindingContext is not MeteoListViewModel viewModel) 
+        {
+            await DisplayAlert("Errore", "Impossibile aggiungere la città", "OK");
+            return;
+        }
 
         var success = await viewModel.AddEntryAsync(city);
 

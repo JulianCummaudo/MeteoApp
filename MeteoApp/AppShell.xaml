@@ -3,8 +3,9 @@
        xmlns:local="clr-namespace:MeteoApp"
        x:Class="MeteoApp.AppShell">
     <TabBar>
-        <ShellContent Title="Home" Icon="dotnet_bot.svg" ContentTemplate="{DataTemplate local:MeteoListPage}" />
-        <ShellContent Title="Empty" Icon="dotnet_bot.svg" ContentTemplate="{DataTemplate local:EmptyPage}" />
+        <ShellContent Title="Home" Icon="home.svg" ContentTemplate="{DataTemplate local:MeteoListPage}" />
+        <ShellContent Title="Map" Icon="map.svg" ContentTemplate="{DataTemplate local:MapPage}" />
+        <ShellContent Title="Empty" Icon="delete.svg" ContentTemplate="{DataTemplate local:EmptyPage}" />
     </TabBar>
     
 </Shell>

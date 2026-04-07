@@ -16,7 +16,7 @@
 		<ApplicationTitle>MeteoApp</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.meteoapp</ApplicationId>
+		<ApplicationId>com.supsi.meteoapp</ApplicationId>
 		<ApplicationIdGuid>4d548f4b-c83d-4fae-9d2c-9cf8027f3d25</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -28,7 +28,6 @@
 		<AssemblyName>MeteoApp</AssemblyName>
 	</PropertyGroup>
 
-	<!-- AndroidManifest Placeholders per Google Maps API Key -->
 	<PropertyGroup>
 		<AndroidManifestPlaceholders>GoogleMapsApiKey=$(GoogleMapsApiKey)</AndroidManifestPlaceholders>
 	</PropertyGroup>
@@ -93,7 +92,6 @@
 		<EmbeddedResource Include="secrets.env" />
 	</ItemGroup>
 
-	<!-- AndroidManifestTokens per Android -->
 	<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidManifestTokens Include="GoogleMapsApiKey=$(GoogleMapsApiKey)" />
 	</ItemGroup>

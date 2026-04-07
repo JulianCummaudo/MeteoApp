@@ -12,14 +12,6 @@
     </ContentPage.ToolbarItems>
 
     <Grid>
-
-        <Label Text="No cities added yet"
-               FontSize="18"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               VerticalOptions="Center"
-               IsVisible="{Binding Entries.Count, Converter={StaticResource EmptyListToBooleanConverter}}"/>
-
         <CollectionView x:Name="zlistView"
                         Margin="16"
                         ItemsSource="{Binding Entries}"
@@ -34,7 +26,7 @@
                 <DataTemplate>
                     <Border Stroke="Transparent"
                             StrokeShape="RoundRectangle 12"
-                            BackgroundColor="#EEEEEE"
+                            BackgroundColor="#5a87e0d0"
                             Padding="16"
                             HeightRequest="90">
 

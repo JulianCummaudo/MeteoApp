@@ -10,5 +10,6 @@
               IsShowingUser="false" 
               MapType="Street"
               VerticalOptions="Fill"
-              HorizontalOptions="Fill" />
+              HorizontalOptions="Fill">
+    </maps:Map>
 </ContentPage>

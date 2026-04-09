@@ -22,6 +22,12 @@ public partial class MeteoListPage : ContentPage
         
         if (BindingContext is MeteoListViewModel vm)
             await vm.RefreshEntriesAsync();
+
+            #if ANDROID
+                await Plugin.Firebase.CloudMessaging.CrossFirebaseCloudMessaging.Current.CheckIfValidAsync();
+                var token = await Plugin.Firebase.CloudMessaging.CrossFirebaseCloudMessaging.Current.GetTokenAsync();
+                System.Diagnostics.Debug.WriteLine(token);
+            #endif
     }
 
 

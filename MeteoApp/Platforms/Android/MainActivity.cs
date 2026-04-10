@@ -6,7 +6,9 @@ using Plugin.Firebase.CloudMessaging;
 
 namespace MeteoApp
 {
-    [Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, LaunchMode = LaunchMode.SingleTop, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
+    [Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, LaunchMode = LaunchMode.SingleTop,
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode |
+        ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
     public class MainActivity : MauiAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -30,9 +32,7 @@ namespace MeteoApp
         private void CreateNotificationChannelIfNeeded()
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-            {
                 CreateNotificationChannel();
-            }
         }
 
         private void CreateNotificationChannel()

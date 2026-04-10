@@ -21,13 +21,15 @@ public partial class MeteoListPage : ContentPage
         base.OnAppearing();
         
         if (BindingContext is MeteoListViewModel vm)
+        {
             await vm.RefreshEntriesAsync();
 
             #if ANDROID
                 await Plugin.Firebase.CloudMessaging.CrossFirebaseCloudMessaging.Current.CheckIfValidAsync();
                 var token = await Plugin.Firebase.CloudMessaging.CrossFirebaseCloudMessaging.Current.GetTokenAsync();
                 System.Diagnostics.Debug.WriteLine(token);
-            #endif
+            #endif   
+        }
     }
 
 
@@ -35,7 +37,11 @@ public partial class MeteoListPage : ContentPage
     {
         base.OnHandlerChanged();
         if (Handler != null)
-            Dispatcher.Dispatch(() => _ = CheckLocationPermissions());
+            Dispatcher.Dispatch(async () =>
+            {
+                await CheckLocationPermissions();
+                await CheckNotificationsPermissions();
+            });
     }
 
     private void OnListItemSelected(object sender, TappedEventArgs e)
@@ -108,5 +114,23 @@ public partial class MeteoListPage : ContentPage
 
             await this.DisplayAlert("Location Required", message, "OK");
         }
+    }
+
+    private async Task CheckNotificationsPermissions()
+    {
+        #if ANDROID
+            if (OperatingSystem.IsAndroidVersionAtLeast(33))
+            {
+                var status = await Permissions.RequestAsync<Permissions.PostNotifications>();
+                
+                if (status != PermissionStatus.Granted)
+                {
+                    await this.DisplayAlertAsync(
+                        "Notifications Disabled",
+                        "Enable notifications to receive weather alerts.",
+                        "OK");
+                }
+            }
+        #endif
     }
 }

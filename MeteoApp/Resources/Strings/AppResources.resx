@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value>
   </resheader>
 
-	<data name="TabHome" xml:space="preserver">
+	<data name="TabHome" xml:space="preserve">
 		<value>Home</value>
 	</data>
-	<data name="TabCurrentLocation" xml:space="preserver">
+	<data name="TabCurrentLocation" xml:space="preserve">
 		<value>Current Location</value>
 	</data>
-	<data name="TabMap" xml:space="preserver">
+	<data name="TabMap" xml:space="preserve">
 		<value>Map</value>
 	</data>
 
@@ -43,5 +43,16 @@
   </data>
   <data name="Visibility" xml:space="preserve">
     <value>Visibility</value>
+  </data>
+
+  <data name="CityDetails" xml:space="preserve">
+    <value>City Details</value>
+  </data>
+
+  <data name="AddCity" xml:space="preserve">
+    <value>Add City</value>
+  </data>
+  <data name="SearchCity" xml:space="preserve">
+    <value>Search a City</value>
   </data>
 </root>

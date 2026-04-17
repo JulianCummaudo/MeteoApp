@@ -13,6 +13,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value>
   </resheader>
 
+	<data name="TabHome" xml:space="preserver">
+		<value>Home</value>
+	</data>
+	<data name="TabCurrentLocation" xml:space="preserver">
+		<value>Current Location</value>
+	</data>
+	<data name="TabMap" xml:space="preserver">
+		<value>Map</value>
+	</data>
+
   <data name="Temperature" xml:space="preserve">
     <value>Temperature</value>
   </data>

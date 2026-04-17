@@ -1,11 +1,12 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:MeteoApp"
+       xmlns:res="clr-namespace:MeteoApp.Resources.Strings"
        x:Class="MeteoApp.AppShell">
     <TabBar>
-        <ShellContent Title="Home" Icon="home.svg" ContentTemplate="{DataTemplate local:MeteoListPage}" />
-        <ShellContent Title="Current Location" Icon="dotnet_bot.svg" ContentTemplate="{DataTemplate local:CurrentLocationPage}" />
-        <ShellContent Title="Map" Icon="map.svg" ContentTemplate="{DataTemplate local:MapPage}" />
+        <ShellContent Title="{x:Static res:AppResources.HomeTab}" Icon="home.svg" ContentTemplate="{DataTemplate local:MeteoListPage}" />
+        <ShellContent Title="{x:Static res:AppResources.CurrentLocationTab}" Icon="dotnet_bot.svg" ContentTemplate="{DataTemplate local:CurrentLocationPage}" />
+        <ShellContent Title="{x:Static res:AppResources.MapTab}" Icon="map.svg" ContentTemplate="{DataTemplate local:MapPage}" />
     </TabBar>
     
 </Shell>

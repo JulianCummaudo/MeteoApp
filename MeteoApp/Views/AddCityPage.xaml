@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:MeteoApp.Resources.Strings"
+             x:Class="MeteoApp.AddCityPage"
+             Title="{x:Static res:AppResources.AddCity}">
+
+    <VerticalStackLayout Padding="24" Spacing="16">
+        <Label Text="{x:Static res:AppResources.SearchCity}" FontSize="20" FontAttributes="Bold"/>
+        <Entry x:Name="CityEntry"
+               Placeholder="es. Lu, Lon, Ber..."
+                Text="{Binding Query}"
+                TextChanged="{Binding SearchCommand}"/>
+        <ActivityIndicator
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}" />
+        <ListView x:Name="ResultsList"
+                  IsVisible="False"
+                  ItemSelected="OnItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Name}"
+                              Detail="{Binding DisplayName}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
+</ContentPage>

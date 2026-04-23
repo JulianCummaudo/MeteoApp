@@ -1,7 +1,7 @@
 using MeteoApp.Models;
 using MeteoApp.Services;
 
-namespace MeteoApp;
+namespace MeteoApp.ViewModels;
 
 public class CurrentLocationViewModel : BaseViewModel
 {

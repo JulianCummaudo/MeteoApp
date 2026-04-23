@@ -2,90 +2,90 @@
 using MeteoApp.Models;
 using MeteoApp.Services;
 
-namespace MeteoApp
+namespace MeteoApp.ViewModels;
+
+public class MeteoListViewModel : BaseViewModel
 {
-    public class MeteoListViewModel : BaseViewModel
+    private readonly DatabaseService _databaseService;
+    private readonly MeteoService _meteoService;
+    private ObservableCollection<MeteoCityEntry> _entries;
+
+    public ObservableCollection<MeteoCityEntry> Entries
     {
-        private readonly DatabaseService _databaseService;
-        private readonly MeteoService _meteoService;
-        private ObservableCollection<MeteoCityEntry> _entries;
-
-        public ObservableCollection<MeteoCityEntry> Entries
+        get { return _entries; }
+        set
         {
-            get { return _entries; }
-            set
-            {
-                _entries = value;
-                OnPropertyChanged();
-            }
+            _entries = value;
+            OnPropertyChanged();
         }
+    }
 
-        public MeteoListViewModel()
-        {
-            Entries = new ObservableCollection<MeteoCityEntry>();
-            _databaseService = new DatabaseService();
-            _meteoService = new MeteoService();
-        }
+    public MeteoListViewModel()
+    {
+        Entries = new ObservableCollection<MeteoCityEntry>();
+        _databaseService = new DatabaseService();
+        _meteoService = new MeteoService();
+    }
 
-        private async Task LoadEntriesFromDatabaseAsync()
+    private async Task LoadEntriesFromDatabaseAsync()
+    {
+        try
         {
-            try
+            await _databaseService.InitAsync();
+            var entries = await _databaseService.GetAllEntriesAsync();
+            var tmpEntries = new List<MeteoCityEntry>();
+
+            Entries.Clear();
+
+            for (int i = 0; i < entries.Count; i++)
             {
-                await _databaseService.InitAsync();
-                var entries = await _databaseService.GetAllEntriesAsync();
-                var tmpEntries = new List<MeteoCityEntry>();
-                
-                Entries.Clear();
+                var entry = entries[i];
+                var location = new Location(entry.Lat, entry.Lon);
+                var meteo = await _meteoService.GetConditionsAsync(location);
 
-                for (int i = 0; i < entries.Count; i++)
+                var meteoCityEntry = new MeteoCityEntry
                 {
-                    var entry = entries[i];
-                    var location = new Location(entry.Lat, entry.Lon);
-                    var meteo = await _meteoService.GetConditionsAsync(location);
+                    City = entry,
+                    Meteo = meteo
+                };
 
-                    var meteoCityEntry = new MeteoCityEntry
-                    {
-                        City = entry,
-                        Meteo = meteo
-                    };
-
-                    tmpEntries.Add(meteoCityEntry);
-                }
-
-                foreach (var entry in tmpEntries)
-                {
-                    Entries.Add(entry);
-                }
+                tmpEntries.Add(meteoCityEntry);
             }
-            catch (Exception ex)
+
+            foreach (var entry in tmpEntries)
             {
-                System.Diagnostics.Debug.WriteLine($"Errore nel caricamento delle entry: {ex.Message}");
+                Entries.Add(entry);
             }
         }
-
-        public async Task RefreshEntriesAsync()
+        catch (Exception ex)
         {
-            await LoadEntriesFromDatabaseAsync();
+            System.Diagnostics.Debug.WriteLine($"Errore nel caricamento delle entry: {ex.Message}");
         }
+    }
 
-        public async Task<bool> AddEntryAsync(CityEntry entry)
+    public async Task RefreshEntriesAsync()
+    {
+        await LoadEntriesFromDatabaseAsync();
+    }
+
+    public async Task<bool> AddEntryAsync(CityEntry entry)
+    {
+        try
         {
-            try
-            {
-                var existsEntry = await _databaseService.ExistsEntryAsync(entry.Name);
+            var existsEntry = await _databaseService.ExistsEntryAsync(entry.Name);
 
-                if (existsEntry)
-                    return false;
-
-                await _databaseService.AddEntryAsync(entry);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Errore nell'aggiunta dell'entry: {ex.Message}");
+            if (existsEntry)
                 return false;
-            }
+
+            await _databaseService.AddEntryAsync(entry);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Errore nell'aggiunta dell'entry: {ex.Message}");
+            return false;
         }
     }
 }
+

@@ -5,24 +5,66 @@
              x:Class="MeteoApp.AddCityPage"
              Title="{x:Static res:AppResources.AddCity}">
 
-    <VerticalStackLayout Padding="24" Spacing="16">
-        <Label Text="{x:Static res:AppResources.SearchCity}" FontSize="20" FontAttributes="Bold"/>
+    <VerticalStackLayout Padding="24"
+                         Spacing="16">
+        <Label Text="{x:Static res:AppResources.SearchCity}"
+               FontSize="20"
+               FontAttributes="Bold"/>
         <Entry x:Name="CityEntry"
                Placeholder="es. Lu, Lon, Ber..."
-                Text="{Binding Query}"
-                TextChanged="{Binding SearchCommand}"/>
+               Text="{Binding Query}"/>
         <ActivityIndicator
-                IsRunning="{Binding IsLoading}"
-                IsVisible="{Binding IsLoading}" />
-        <ListView x:Name="ResultsList"
-                  IsVisible="False"
-                  ItemSelected="OnItemSelected">
-            <ListView.ItemTemplate>
+            IsRunning="{Binding IsLoading}"
+            IsVisible="{Binding IsLoading}"/>
+        <CollectionView IsVisible="{Binding ResultsVisible}"
+                        ItemsSource="{Binding SearchResults}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnItemSelected"
+                        Margin="0,8,0,0">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="8"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding Name}"
-                              Detail="{Binding DisplayName}"/>
+                    <Border Stroke="Transparent"
+                            StrokeShape="RoundRectangle 12"
+                            BackgroundColor="#5a87e0d0"
+                            Padding="16">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor"
+                                                    Value="#5a87e0d0"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid ColumnDefinitions="*, Auto">
+                            <StackLayout Grid.Column="0"
+                                         Orientation="Vertical"
+                                         VerticalOptions="Center">
+                                <Label Text="{Binding Name}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"/>
+                                <Label Text="{Binding Country}"
+                                       FontSize="13"
+                                       TextColor="#888888"/>
+                            </StackLayout>
+                            <Label Grid.Column="1"
+                                   Text="+"
+                                   FontSize="20"
+                                   TextColor="#888888"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"/>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>

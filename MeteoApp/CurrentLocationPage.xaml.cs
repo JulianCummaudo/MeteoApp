@@ -1,4 +1,5 @@
 ﻿using MeteoApp.Services;
+using MeteoApp.ViewModels;
 
 namespace MeteoApp;
 
@@ -6,11 +7,11 @@ public partial class CurrentLocationPage : ContentPage
 {
     private readonly CurrentLocationViewModel _viewModel;
 
-    public CurrentLocationPage()
+    public CurrentLocationPage(CurrentLocationViewModel viewModel)
     {
         InitializeComponent();
-        _viewModel = new CurrentLocationViewModel();
-        BindingContext = _viewModel;
+        BindingContext = viewModel;
+        _viewModel = viewModel;
     }
 
     protected override async void OnAppearing()

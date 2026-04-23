@@ -1,5 +1,6 @@
 ﻿using MeteoApp.Models;
 using MeteoApp.Services;
+using MeteoApp.ViewModels;
 
 namespace MeteoApp;
 
@@ -7,19 +8,17 @@ public partial class MeteoListPage : ContentPage
 {
     public Location CurrentLocation { get; set; } = null;
     private readonly MeteoService _meteoService = new MeteoService();
-    private MeteoListViewModel _viewModel;
 
-    public MeteoListPage()
+    public MeteoListPage(MeteoListViewModel viewModel)
     {
         InitializeComponent();
-        _viewModel = new MeteoListViewModel();
-        BindingContext = _viewModel;
+        BindingContext = viewModel;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        
+
         if (BindingContext is MeteoListViewModel vm)
             await vm.RefreshEntriesAsync();
     }
@@ -40,7 +39,7 @@ public partial class MeteoListPage : ContentPage
             {
                 { "CityEntry", meteoCityEntry }
             };
-            
+
             Shell.Current.GoToAsync("entrydetails", navigationParameter);
         }
     }

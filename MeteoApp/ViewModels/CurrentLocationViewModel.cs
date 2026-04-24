@@ -29,4 +29,31 @@ public class CurrentLocationViewModel : BaseViewModel
             System.Diagnostics.Debug.WriteLine($"Errore meteo: {ex.Message}");
         }
     }
+
+    public async Task<Location> GetLocation()
+    {
+        try
+        {
+            var locationRequest = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(15));
+            var location = await Geolocation.GetLocationAsync(locationRequest);
+
+            return location;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    public async Task<bool> CheckLocationPermissions()
+    {
+        var permissions = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+
+        if (permissions != PermissionStatus.Granted)
+        {
+            permissions = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+        }
+
+        return permissions == PermissionStatus.Granted;
+    }
 }

@@ -27,6 +27,9 @@ public static class MauiProgram
 		builder.Services.AddTransient<MeteoListPage>();
 		builder.Services.AddTransient<CurrentLocationPage>();
 
+		// Blazor
+		builder.Services.AddMauiBlazorWebView();
+
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif

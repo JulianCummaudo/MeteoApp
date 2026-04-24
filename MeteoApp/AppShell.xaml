@@ -4,9 +4,18 @@
        xmlns:res="clr-namespace:MeteoApp.Resources.Strings"
        x:Class="MeteoApp.AppShell">
     <TabBar>
-        <ShellContent Title="{x:Static res:AppResources.TabHome}" Icon="home.svg" ContentTemplate="{DataTemplate local:MeteoListPage}" />
-        <ShellContent Title="{x:Static res:AppResources.TabCurrentLocation}" Icon="dotnet_bot.svg" ContentTemplate="{DataTemplate local:CurrentLocationPage}" />
-        <ShellContent Title="{x:Static res:AppResources.TabMap}" Icon="map.svg" ContentTemplate="{DataTemplate local:MapPage}" />
+        <ShellContent Title="{x:Static res:AppResources.TabHome}"
+                      Icon="home.svg"
+                      ContentTemplate="{DataTemplate local:MeteoListPage}"/>
+        <ShellContent Title="{x:Static res:AppResources.TabCurrentLocation}"
+                      Icon="dotnet_bot.svg"
+                      ContentTemplate="{DataTemplate local:CurrentLocationPage}"/>
+        <ShellContent Title="{x:Static res:AppResources.TabMap}"
+                      Icon="map.svg"
+                      ContentTemplate="{DataTemplate local:MapPage}"/>
+        <ShellContent Title="{x:Static res:AppResources.TabBlazor}"
+                      Icon="map.svg"
+                      ContentTemplate="{DataTemplate local:BlazorPage}"/>
     </TabBar>
-    
+
 </Shell>

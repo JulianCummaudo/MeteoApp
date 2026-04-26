@@ -22,12 +22,14 @@ public static class MauiProgram
 		builder.Services.AddSingleton<AddCityViewModel>();
 		builder.Services.AddSingleton<CurrentLocationViewModel>();
 		builder.Services.AddSingleton<MapViewModel>();
+		builder.Services.AddTransient<MeteoItemViewModel>();
 
 		// Pages
 		builder.Services.AddTransient<AddCityPage>();
 		builder.Services.AddTransient<MeteoListPage>();
 		builder.Services.AddTransient<CurrentLocationPage>();
 		builder.Services.AddTransient<MapPage>();
+		builder.Services.AddTransient<MeteoItemPage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

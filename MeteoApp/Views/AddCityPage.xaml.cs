@@ -6,12 +6,12 @@ namespace MeteoApp;
 
 public partial class AddCityPage : ContentPage
 {
-    private AddCityViewModel _viewModel;
+    private readonly AddCityViewModel _viewModel;
 
-    public AddCityPage(MeteoListViewModel meteoViewModel)
+    public AddCityPage(AddCityViewModel viewModel)
     {
         InitializeComponent();
-        _viewModel = new AddCityViewModel(meteoViewModel);
+        _viewModel = viewModel;
         BindingContext = _viewModel;
     }
 

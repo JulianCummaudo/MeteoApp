@@ -2,82 +2,98 @@ using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
 using MeteoApp.Services;
 using MeteoApp.Models;
+using MeteoApp.ViewModels;
 
 namespace MeteoApp;
 
 public partial class MapPage : ContentPage
 {
-    private readonly MeteoService _meteoService = new MeteoService();
+    private readonly MapViewModel _viewModel;
 
-    public MapPage()
+    public MapPage(MapViewModel viewModel)
     {
-		InitializeComponent();
-        InitializeMap();
+        InitializeComponent();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
         MyMap.MapClicked += OnMapClickedWrapper;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        bool permissionsGranted = await _viewModel.CheckLocationPermissions();
+        Location initialLocation;
+
+        if (!permissionsGranted)
+        {
+            await DisplayAlert(
+                "Permessi negati",
+                "I permessi per accedere alla posizione sono stati negati.",
+                "OK");
+            initialLocation = _viewModel.GetInitialLocation();
+        }
+        else
+        {
+            initialLocation = await _viewModel.GetLocation();
+        }
+
+        InitializeMap(initialLocation);
+    }
+
+    private void InitializeMap(Location initialLocation)
+    {
+        if (initialLocation == null)
+        {
+            initialLocation = _viewModel.GetInitialLocation();
+        }
+
+        var pin = new Pin
+        {
+            Label = "SUPSI",
+            Address = "Lugano-Viganello",
+            Location = initialLocation
+        };
+
+        MyMap.Pins.Clear();
+        MyMap.Pins.Add(pin);
+
+        var region = MapSpan.FromCenterAndRadius(
+            initialLocation,
+            Distance.FromKilometers(1));
+
+        MyMap.MoveToRegion(region);
+    }
+
 
     private void OnMapClickedWrapper(object sender, MapClickedEventArgs e)
     {
         _ = OnMapClicked(sender, e);
     }
 
-    private void InitializeMap()
-    {
-        // 1. Define the coordinates (Lugano)
-        var location = new Location(46.012, 8.958);
-
-        // 2. Create a pin (marker) at that location
-        var pin = new Pin
-        {
-            Label = "SUPSI",
-            Address = "Lugano-Viganello",
-            Location = location
-        };
-
-        MyMap.Pins.Add(pin);
-
-        // 3. Center the map around Lugano with a 1 km radius
-        var region = MapSpan.FromCenterAndRadius(location, Distance.FromKilometers(1));
-        MyMap.MoveToRegion(region);
-    }
-
     public async Task OnMapClicked(object sender, MapClickedEventArgs e)
     {
-        if (e.Location is Location location)
+        var location = e.Location;
+
+        if (location == null)
         {
-            double latitude = location.Latitude;
-            double longitude = location.Longitude;
-
-            try
-            {
-                var meteo = await _meteoService.GetConditionsAsync(location);
-
-                // Temporary CityEntry
-                var cityEntry = new CityEntry
-                {
-                    Name = "Posizione selezionata",
-                    Country = "",
-                    Lat = latitude,
-                    Lon = longitude
-                };
-
-                var meteoCityEntry = new MeteoCityEntry
-                {
-                    City = cityEntry,
-                    Meteo = meteo
-                };
-
-                var navigationParameter = new Dictionary<string, object>
-                {
-                    { "CityEntry", meteoCityEntry }
-                };
-
-                await Shell.Current.GoToAsync("entrydetails", navigationParameter);
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlertAsync("Errore", "Impossibile recuperare il meteo", "OK");
-            }
+            await DisplayAlert("Error", "Unable to get location from the map click.", "OK");
+            return;
         }
+
+        MeteoCityEntry meteoCityEntry = await _viewModel.GetMeteoCityEntryByLocation(location);
+
+        if (meteoCityEntry == null)
+        {
+            await DisplayAlert("Error", "Unable to retrieve weather data for the selected location.", "OK");
+            return;
+        }
+
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "CityEntry", meteoCityEntry }
+        };
+
+        await Shell.Current.GoToAsync("entrydetails", navigationParameter);
     }
 }

@@ -10,8 +10,8 @@ public partial class CurrentLocationPage : ContentPage
     public CurrentLocationPage(CurrentLocationViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
         _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
 
     protected override async void OnAppearing()

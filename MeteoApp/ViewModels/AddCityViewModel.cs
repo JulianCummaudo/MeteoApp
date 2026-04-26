@@ -9,9 +9,9 @@ namespace MeteoApp.ViewModels;
 public class AddCityViewModel : BaseViewModel
 {
     private static readonly int RESULT_LIMIT = 5;
-    private readonly GeolocationService _geolocationService = new();
+    private readonly GeolocationService _geolocationService;
+    private readonly DatabaseService _databaseService;
     private CancellationTokenSource _debounceCts;
-    private MeteoListViewModel _meteoViewModel;
 
     private bool _isLoading;
     public bool IsLoading
@@ -58,9 +58,10 @@ public class AddCityViewModel : BaseViewModel
         }
     }
 
-    public AddCityViewModel(MeteoListViewModel meteoViewModel)
+    public AddCityViewModel()
     {
-        _meteoViewModel = meteoViewModel;
+        _geolocationService = new GeolocationService();
+        _databaseService = new DatabaseService();
     }
 
     public async Task SearchCitiesAsync(string query)
@@ -105,6 +106,21 @@ public class AddCityViewModel : BaseViewModel
             Lon = selected.Lon
         };
 
-        return await _meteoViewModel.AddEntryAsync(city);
+        try
+        {
+            var existsEntry = await _databaseService.ExistsEntryAsync(city.Name);
+
+            if (existsEntry)
+                return false;
+
+            await _databaseService.AddEntryAsync(city);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Errore nell'aggiunta dell'entry: {ex.Message}");
+            return false;
+        }
     }
 }

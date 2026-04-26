@@ -8,8 +8,8 @@ public class MeteoListViewModel : BaseViewModel
 {
     private readonly DatabaseService _databaseService;
     private readonly MeteoService _meteoService;
-    private ObservableCollection<MeteoCityEntry> _entries;
 
+    private ObservableCollection<MeteoCityEntry> _entries;
     public ObservableCollection<MeteoCityEntry> Entries
     {
         get { return _entries; }
@@ -22,9 +22,10 @@ public class MeteoListViewModel : BaseViewModel
 
     public MeteoListViewModel()
     {
-        Entries = new ObservableCollection<MeteoCityEntry>();
         _databaseService = new DatabaseService();
         _meteoService = new MeteoService();
+
+        Entries = new ObservableCollection<MeteoCityEntry>();
     }
 
     private async Task LoadEntriesFromDatabaseAsync()
@@ -66,26 +67,6 @@ public class MeteoListViewModel : BaseViewModel
     public async Task RefreshEntriesAsync()
     {
         await LoadEntriesFromDatabaseAsync();
-    }
-
-    public async Task<bool> AddEntryAsync(CityEntry entry)
-    {
-        try
-        {
-            var existsEntry = await _databaseService.ExistsEntryAsync(entry.Name);
-
-            if (existsEntry)
-                return false;
-
-            await _databaseService.AddEntryAsync(entry);
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Errore nell'aggiunta dell'entry: {ex.Message}");
-            return false;
-        }
     }
 }
 

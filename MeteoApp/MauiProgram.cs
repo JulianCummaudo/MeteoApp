@@ -21,11 +21,13 @@ public static class MauiProgram
 		builder.Services.AddSingleton<MeteoListViewModel>();
 		builder.Services.AddSingleton<AddCityViewModel>();
 		builder.Services.AddSingleton<CurrentLocationViewModel>();
+		builder.Services.AddSingleton<MapViewModel>();
 
 		// Pages
 		builder.Services.AddTransient<AddCityPage>();
 		builder.Services.AddTransient<MeteoListPage>();
 		builder.Services.AddTransient<CurrentLocationPage>();
+		builder.Services.AddTransient<MapPage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

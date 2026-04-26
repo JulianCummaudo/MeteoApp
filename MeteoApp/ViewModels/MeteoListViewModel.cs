@@ -9,6 +9,17 @@ public class MeteoListViewModel : BaseViewModel
     private readonly DatabaseService _databaseService;
     private readonly MeteoService _meteoService;
 
+    private Location _currentLocation;
+    public Location CurrentLocation
+    {
+        get { return _currentLocation; }
+        set
+        {
+            _currentLocation = value;
+            OnPropertyChanged();
+        }
+    }
+
     private ObservableCollection<MeteoCityEntry> _entries;
     public ObservableCollection<MeteoCityEntry> Entries
     {

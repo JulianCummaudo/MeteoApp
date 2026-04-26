@@ -15,7 +15,6 @@ public partial class MeteoItemPage : ContentPage
     {
         set
         {
-            Debug.WriteLine($"Value impostata: {value?.City.Name}");
             _viewModel.Entry = value;
         }
     }

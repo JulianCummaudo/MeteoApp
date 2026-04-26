@@ -16,7 +16,6 @@ public class MeteoItemViewModel : BaseViewModel
         set
         {
             _entry = value;
-            Debug.WriteLine($"Entry impostata: {_entry?.City.Name}");
             OnPropertyChanged();
         }
     }

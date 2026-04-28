@@ -1,4 +1,6 @@
+.DS_Store
 /bin
 /obj
 secrets.env
 Directory.Build.props.user
+google-services.json

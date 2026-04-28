@@ -4,11 +4,12 @@
              x:Class="MeteoApp.MeteoListPage">
 
     <ContentPage.Resources>
-        <converters:WeatherIconConverter x:Key="WeatherIconConverter" />
+        <converters:WeatherIconConverter x:Key="WeatherIconConverter"/>
     </ContentPage.Resources>
-    
+
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Clicked="OnItemAdded" />
+        <ToolbarItem Text="Add"
+                Clicked="OnItemAdded"/>
     </ContentPage.ToolbarItems>
 
     <Grid>
@@ -27,8 +28,7 @@
                     <Border Stroke="Transparent"
                             StrokeShape="RoundRectangle 12"
                             BackgroundColor="#5a87e0d0"
-                            Padding="16"
-                            HeightRequest="90">
+                            Padding="16">
 
                         <Grid ColumnDefinitions="64, *, Auto">
 

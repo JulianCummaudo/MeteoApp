@@ -71,17 +71,21 @@
 	  <None Remove="Newtonsoft.Json" />
 	  <None Remove="Plugin.LocalNotification" />
 	</ItemGroup>
+
 	<ItemGroup>
 	  <Folder Include="Models\" />
 	</ItemGroup>
+
 	<ItemGroup>
 	  <BundleResource Include="Resources\.DS_Store" />
 	</ItemGroup>
+
 	<ItemGroup>
 	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="MeteoItemPage.xaml">
 	    <SubType>Designer</SubType>
 	  </MauiXaml>
 	</ItemGroup>
+
 	<ItemGroup>
 	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="MeteoListPage.xaml.cs">
 	    <DependentUpon>MeteoListPage.xaml</DependentUpon>
@@ -98,5 +102,15 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls.Maps" Version="$(MauiVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\Strings\AppResources.resx">
+			<Generator>MSBuild:Compile</Generator>
+			<StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+			<StronglyTypedNamespace>MeteoApp.Resources.Strings</StronglyTypedNamespace>
+			<StronglyTypedFileName>$(IntermediateOutputPath)\AppResources.Designer.cs</StronglyTypedFileName>
+			<StronglyTypedClassName>AppResources</StronglyTypedClassName>
+		</EmbeddedResource>
 	</ItemGroup>
 </Project>

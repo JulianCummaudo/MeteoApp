@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MeteoApp.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace MeteoApp;
 
@@ -9,17 +10,31 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-    		.UseMauiMaps()
+			.UseMauiMaps()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
+		// ViewModels
+		builder.Services.AddSingleton<MeteoListViewModel>();
+		builder.Services.AddSingleton<AddCityViewModel>();
+		builder.Services.AddSingleton<CurrentLocationViewModel>();
+		builder.Services.AddSingleton<MapViewModel>();
+		builder.Services.AddTransient<MeteoItemViewModel>();
+
+		// Pages
+		builder.Services.AddTransient<AddCityPage>();
+		builder.Services.AddTransient<MeteoListPage>();
+		builder.Services.AddTransient<CurrentLocationPage>();
+		builder.Services.AddTransient<MapPage>();
+		builder.Services.AddTransient<MeteoItemPage>();
+
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
-        return builder.Build();
+		return builder.Build();
 	}
 }
 

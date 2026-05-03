@@ -12,11 +12,103 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value>
   </resheader>
-
-  <data name="HelloMessage" xml:space="preserve">
-    <value>Hello World!</value>
+  <data name="TabHome" xml:space="preserve">
+    <value>Home</value>
   </data>
-  <data name="ChangeLanguage" xml:space="preserve">
-    <value>Change language</value>
+  <data name="TabCurrentLocation" xml:space="preserve">
+    <value>Posizione Attuale</value>
+  </data>
+  <data name="TabMap" xml:space="preserve">
+    <value>Mappa</value>
+  </data>
+  <data name="TabBlazor" xml:space="preserve">
+    <value>Blazor</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>Temperatura</value>
+  </data>
+  <data name="FeelsLikeTemperature" xml:space="preserve">
+    <value>Percepita</value>
+  </data>
+  <data name="Humidity" xml:space="preserve">
+    <value>Umidità</value>
+  </data>
+  <data name="Pressure" xml:space="preserve">
+    <value>Pressione</value>
+  </data>
+  <data name="Conditions" xml:space="preserve">
+    <value>Condizioni</value>
+  </data>
+  <data name="Wind" xml:space="preserve">
+    <value>Vento</value>
+  </data>
+  <data name="Visibility" xml:space="preserve">
+    <value>Visibilità</value>
+  </data>
+  <data name="CityDetails" xml:space="preserve">
+    <value>Dettagli Città</value>
+  </data>
+  <data name="AddCity" xml:space="preserve">
+    <value>Aggiungi Città</value>
+  </data>
+  <data name="SearchCity" xml:space="preserve">
+    <value>Cerca una Città</value>
+  </data>
+  <data name="LastUpdate" xml:space="preserve">
+    <value>Ultimo Aggiornamento</value>
+  </data>
+  <data name="PermissionsDeniedTitle" xml:space="preserve">
+    <value>Permessi Negati</value>
+  </data>
+  <data name="NotificationPermissionsDeniedMessage" xml:space="preserve">
+    <value>I permessi per mostrare le notifiche sono stati negati. Abilitali nelle impostazioni per ricevere gli avvisi meteo.</value>
+  </data>
+  <data name="LocationPermissionsDeniedMessage" xml:space="preserve">
+    <value>I permessi per accedere alla posizione sono stati negati. L'app utilizzerà una posizione predefinita.</value>
+  </data>
+  <data name="ConfirmDeletionTitle" xml:space="preserve">
+    <value>Conferma Eliminazione</value>
+  </data>
+  <data name="ConfirmDeletionMessage" xml:space="preserve">
+    <value>Sei sicuro di voler eliminare '{0}'?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sì</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="DeletionSuccessTitle" xml:space="preserve">
+    <value>Successo</value>
+  </data>
+  <data name="DeleteCitySuccessMessage" xml:space="preserve">
+    <value>Città eliminata dal database</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Errore</value>
+  </data>
+  <data name="DeleteCityErrorMessage" xml:space="preserve">
+    <value>Impossibile eliminare la città. Riprova.</value>
+  </data>
+  <data name="WeatherDataRetrievalErrorMessage" xml:space="preserve">
+    <value>Impossibile recuperare i dati meteo per la posizione selezionata.</value>
+  </data>
+  <data name="CityAlreadyExistsMessage" xml:space="preserve">
+    <value>Questa città è già presente nella tua lista.</value>
+  </data>
+  <data name="SelectedLocationName" xml:space="preserve">
+    <value>Posizione Selezionata</value>
+  </data>
+  <data name="TemperatureBelowThreshold" xml:space="preserve">
+    <value>Temperatura sotto la soglia</value>
+  </data>
+  <data name="TemperatureAboveThreshold" xml:space="preserve">
+    <value>Temperatura sopra la soglia</value>
+  </data>
+  <data name="TemperatureAlertTitle" xml:space="preserve">
+    <value>Avviso Temperatura</value>
   </data>
 </root>

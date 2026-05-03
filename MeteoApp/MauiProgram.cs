@@ -13,19 +13,7 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
 			.UseMauiMaps()
-			.UseLocalNotification(config =>
-			{
-				config.AddAndroid(android =>
-				{
-					android.AddChannel(new AndroidNotificationChannelRequest
-					{
-						Id = NotificationService.CHANNEL_ID,
-						Name = "Meteo Alerts",
-						Importance = AndroidImportance.High,
-						ShowBadge = true
-					});
-				});
-			})
+			.UseLocalNotification()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

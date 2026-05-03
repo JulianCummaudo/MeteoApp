@@ -6,14 +6,14 @@ public class MeteoWorker : Worker
 {
     private readonly DatabaseService _databaseService;
     private readonly MeteoService _meteoService;
-    private readonly NotificationService _notificationService;
+    private readonly LocalNotificationsService _notificationService;
 
     public MeteoWorker(Context context, WorkerParameters workerParams)
         : base(context, workerParams)
     {
         _databaseService = new DatabaseService(); ;
         _meteoService = new MeteoService();
-        _notificationService = new NotificationService();
+        _notificationService = new LocalNotificationsService();
     }
 
     public override Result DoWork()

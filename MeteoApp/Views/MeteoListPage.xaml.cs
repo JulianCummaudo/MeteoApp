@@ -8,13 +8,11 @@ namespace MeteoApp;
 public partial class MeteoListPage : ContentPage
 {
     private MeteoListViewModel _viewModel;
-    private NotificationService _notificationService;
 
     public MeteoListPage(MeteoListViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;
-        _notificationService = new NotificationService();
         BindingContext = viewModel;
     }
 

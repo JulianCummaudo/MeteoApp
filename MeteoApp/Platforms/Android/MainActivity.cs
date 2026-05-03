@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Android.OS;
 using AndroidX.Work;
 using Java.Util.Concurrent;
+using MeteoApp.Services;
 
 namespace MeteoApp;
 
@@ -14,7 +15,24 @@ public class MainActivity : MauiAppCompatActivity
     protected override void OnCreate(Bundle savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
+        CreateNotificationChannel();
         ScheduleMeteoWorker();
+    }
+
+    private void CreateNotificationChannel()
+    {
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+        {
+            var channel = new NotificationChannel(
+                LocalNotificationsService.CHANNEL_ID,
+                "Meteo Alerts",
+                NotificationImportance.High
+            );
+            channel.Description = "Notifications for temperature alerts";
+
+            var manager = (NotificationManager)GetSystemService(NotificationService)!;
+            manager.CreateNotificationChannel(channel);
+        }
     }
 
     private void ScheduleMeteoWorker()
@@ -23,7 +41,7 @@ public class MainActivity : MauiAppCompatActivity
             .SetRequiredNetworkType(NetworkType.Connected)
             .Build();
 
-        var periodicRequest = PeriodicWorkRequest.Builder
+        /*var periodicRequest = PeriodicWorkRequest.Builder
             .From<MeteoWorker>(SCHEDULE_PERIOD, TimeUnit.Minutes)
             .SetConstraints(constraints)
             .Build();
@@ -33,7 +51,14 @@ public class MainActivity : MauiAppCompatActivity
             "MeteoTemperatureCheck",
             ExistingPeriodicWorkPolicy.Keep!,
             periodicRequest
-        );
+        );*/
+
+        // OneTimeWorkRequest.Builder(TestWorker.class).setConstraints(constraint).build();
+        var oneTimeRequest = new OneTimeWorkRequest.Builder(Java.Lang.Class.FromType(typeof(MeteoWorker)))
+            .SetConstraints(constraints)
+            .SetInitialDelay(10, TimeUnit.Seconds)
+            .Build();
+        WorkManager.GetInstance(this).Enqueue(oneTimeRequest);
     }
 }
 

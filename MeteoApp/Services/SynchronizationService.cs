@@ -11,6 +11,8 @@ public class SynchronizationService
     private static readonly string APPWRITE_PROJECT_ID_KEY = "APPWRITE_PROJECT_ID";
 
     private readonly Client _client;
+    private string _databaseId;
+    private string _collectionId;
 
     public SynchronizationService()
     {
@@ -26,6 +28,16 @@ public class SynchronizationService
 
     public async Task CreateDatabaseIfNotExistsAsync()
     {
+        var existingDatabaseId = Preferences.Get("appwrite_database_id", null);
+        var existingCollectionId = Preferences.Get("appwrite_collection_id", null);
+
+        if (existingDatabaseId != null && existingCollectionId != null)
+        {
+            _databaseId = existingDatabaseId;
+            _collectionId = existingCollectionId;
+            return; // già creati, non rifare
+        }
+
         var databases = new Databases(_client);
         Database meteoDatabase;
         Collection meteoCollection;
@@ -40,6 +52,12 @@ public class SynchronizationService
             collectionId: ID.Unique(),
             name: "cities"
         );
+
+        _databaseId = meteoDatabase.Id;
+        _collectionId = meteoCollection.Id;
+
+        Preferences.Set("appwrite_database_id", meteoDatabase.Id);
+        Preferences.Set("appwrite_collection_id", meteoCollection.Id);
 
         await databases.CreateIntegerAttribute(
             databaseId: meteoDatabase.Id,
@@ -85,12 +103,6 @@ public class SynchronizationService
         var documents = await databases.ListDocuments(
             databaseId: meteoDatabase.Id,
             collectionId: meteoCollection.Id
-        );
-
-        meteoCollection = await databases.CreateCollection(
-            databaseId: meteoDatabase.Id,
-            collectionId: ID.Unique(),
-            name: "cities"
         );
     }
 }

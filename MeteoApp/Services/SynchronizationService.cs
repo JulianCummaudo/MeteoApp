@@ -145,15 +145,19 @@ public class SynchronizationService
         try
         {
             await EnsureLoginAsync();
-            await _databaseService.AddEntryAsync(city);
-            await _databases.CreateDocument(
+
+            var document = await _databases.CreateDocument(
                 databaseId: _databaseId,
                 collectionId: _collectionId,
                 documentId: ID.Unique(),
                 data: cityData
             );
 
+            city.Id = document.Id;
+
+            await _databaseService.AddEntryAsync(city);
             Debug.WriteLine($"City added: {city.Name}");
+
             return true;
         }
         catch (Exception ex)

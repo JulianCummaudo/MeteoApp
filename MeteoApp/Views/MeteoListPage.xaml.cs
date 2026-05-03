@@ -35,9 +35,9 @@ public partial class MeteoListPage : ContentPage
         if (sender is View view && view.BindingContext is MeteoCityEntry entry)
         {
             var navigationParameter = new Dictionary<string, object>
-        {
-            { "CityEntry", entry }
-        };
+            {
+                { "CityEntry", entry }
+            };
 
             Shell.Current.GoToAsync("entrydetails", navigationParameter);
         }

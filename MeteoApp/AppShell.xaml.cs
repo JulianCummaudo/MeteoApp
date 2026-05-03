@@ -3,6 +3,8 @@ namespace MeteoApp;
 public partial class AppShell : Shell
 {
 	public Dictionary<string, Type> Routes { get; private set; } = new Dictionary<string, Type>();
+
+    private bool _isItalian;
     
     public AppShell()
 	{
@@ -19,5 +21,14 @@ public partial class AppShell : Shell
 
         foreach (var item in Routes)
             Routing.RegisterRoute(item.Key, item.Value);
+    }
+
+
+    private void OnChangeLanguageClicked(object sender, EventArgs e)
+    {
+        var current = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        var newCulture = current == "it" ? "en" : "it";
+        App.LanguageService.SetLanguage(newCulture);
+        
     }
 }

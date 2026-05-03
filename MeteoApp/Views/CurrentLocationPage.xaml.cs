@@ -1,5 +1,6 @@
 ﻿using MeteoApp.Services;
 using MeteoApp.ViewModels;
+using MeteoApp.Resources.Strings;
 
 namespace MeteoApp;
 
@@ -21,7 +22,7 @@ public partial class CurrentLocationPage : ContentPage
         bool permissionsGranted = await _viewModel.CheckLocationPermissions();
         if (!permissionsGranted)
         {
-            await DisplayAlert("Permessi negati", "I permessi per accedere alla posizione sono stati negati. Abilitali dalle impostazioni per visualizzare le condizioni meteo attuali.", "OK");
+            await DisplayAlert(AppResources.PermissionsDeniedTitle, AppResources.LocationPermissionsDeniedMessage, AppResources.OK);
             return;
         }
 

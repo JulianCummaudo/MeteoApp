@@ -1,5 +1,6 @@
 using MeteoApp.Models;
 using MeteoApp.Services;
+using System.Diagnostics;
 
 namespace MeteoApp.ViewModels;
 
@@ -26,7 +27,7 @@ public class CurrentLocationViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Meteo error: {ex.Message}");
+            Debug.WriteLine($"Meteo error: {ex.Message}");
         }
     }
 

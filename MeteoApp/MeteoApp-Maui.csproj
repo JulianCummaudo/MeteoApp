@@ -121,4 +121,8 @@
 	<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
     	<GoogleServicesJson Include="Platforms\Android\google-services.json" />
 	</ItemGroup>
+	<!--Fix for languages, some resource strings were not being generated correctly-->
+	<PropertyGroup>
+		<PublicResXFiles>true</PublicResXFiles>
+	</PropertyGroup>
 </Project>

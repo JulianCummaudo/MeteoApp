@@ -3,6 +3,7 @@ using AndroidX.Lifecycle;
 using MeteoApp.Models;
 using MeteoApp.Services;
 using MeteoApp.ViewModels;
+using MeteoApp.Resources.Strings;
 
 namespace MeteoApp;
 
@@ -29,25 +30,22 @@ public partial class MeteoItemPage : ContentPage
     private async void OnDeleteClicked(object sender, EventArgs e)
     {
         bool confirm = await DisplayAlert(
-            "Conferma eliminazione",
-            $"Sei sicuro di voler eliminare '{_viewModel.Entry.City.Name}'?",
-            "Sì",
-            "No");
-
+            AppResources.ConfirmDeletionTitle,
+            string.Format(AppResources.ConfirmDeletionMessage, _viewModel.Entry.City.Name),
+            AppResources.Yes,
+            AppResources.No);
         if (confirm)
         {
             bool success = await _viewModel.DeleteCityAsync();
 
             if (success)
             {
-                await DisplayAlert("Successo", "Città eliminata dal database", "OK");
-
-                // Torna indietro alla lista
+                await DisplayAlert(AppResources.DeletionSuccessTitle, AppResources.DeleteCitySuccessMessage, AppResources.OK);
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
-                await DisplayAlert("Errore", "Impossibile eliminare la città. Riprova.", "OK");
+                await DisplayAlert(AppResources.ErrorTitle, AppResources.DeleteCityErrorMessage, AppResources.OK);
             }
         }
     }

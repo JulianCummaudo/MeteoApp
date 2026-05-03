@@ -111,11 +111,19 @@
             </Border>
 
             <!-- Data/Ora -->
-            <Label Text="{Binding Meteo.DateTime, StringFormat='Ultimo aggiornamento: {0:g}'}"
-                   FontSize="12"
-                   TextColor="#AAAAAA"
-                   HorizontalOptions="Center"
-                   Margin="0,16"/>
+            <StackLayout Spacing="4" orientation="Horizontal">
+                <Label Text="{x:Static res:AppResources.LastUpdate}"
+                    FontSize="12"
+                    TextColor="#AAAAAA"
+                    HorizontalOptions="Center"
+                    Margin="0,16"/>
+
+                <Label Text="{Binding Meteo.DateTime, StringFormat=' {0:g}'}"
+                    FontSize="12"
+                    TextColor="#AAAAAA"
+                    HorizontalOptions="Center"
+                    Margin="0,16"/>
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 </ContentPage>

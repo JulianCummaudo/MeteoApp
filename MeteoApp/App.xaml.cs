@@ -10,25 +10,37 @@ namespace MeteoApp;
 
 public partial class App : Application
 {
-	private DatabaseService _databaseService = new DatabaseService();
-	private MeteoService _meteoService = new MeteoService();
 	private readonly SynchronizationService _syncService;
+	public static readonly LanguageService LanguageService = new();
 
 	public App()
 	{
 		_syncService = new SynchronizationService();
-
+		
 		InitializeComponent();
 
 		CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture;
 		CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentUICulture;
 
-		MainPage = new AppShell();
+		//MainPage = new AppShell();
 	}
 
 	protected override async void OnStart()
 	{
 		base.OnStart();
 		await _syncService.SynchronizeDatabaseAsync();
+	}
+
+	protected override Window CreateWindow(IActivationState? activationState)
+	{
+		var window = new Window(new AppShell());
+
+		// Recreate MainPage when language changes
+		LanguageService.LanguageChanged += () =>
+		{
+			window.Page = new AppShell();
+		};
+
+		return window;
 	}
 }

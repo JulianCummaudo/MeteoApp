@@ -2,6 +2,7 @@ using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
 using MeteoApp.Services;
 using MeteoApp.Models;
+using MeteoApp.Resources.Strings;
 
 namespace MeteoApp.ViewModels;
 
@@ -33,7 +34,7 @@ public class MapViewModel : BaseViewModel
             // Temporary CityEntry
             var cityEntry = new CityEntry
             {
-                Name = "Posizione selezionata",
+                Name = AppResources.SelectedLocationName,
                 Country = "",
                 Lat = latitude,
                 Lon = longitude

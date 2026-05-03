@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content;
 using AndroidX.Core.App;
 using MeteoApp;
+using MeteoApp.Resources.Strings;
 
 public class LocalNotificationsService
 {
@@ -16,12 +17,12 @@ public class LocalNotificationsService
         string? message = null;
 
         if (temperature < TEMP_MIN)
-            message = $"{cityName}: temperatura sotto la soglia ({temperature:F1}°C)";
+            message = $"{cityName}: {AppResources.TemperatureBelowThreshold} ({temperature:F1}°C)";
         else if (temperature > TEMP_MAX)
-            message = $"{cityName}: temperatura sopra la soglia ({temperature:F1}°C)";
+            message = $"{cityName}: {AppResources.TemperatureAboveThreshold} ({temperature:F1}°C)";
 
         if (message != null)
-            await SendNotificationAsync(cityId, "Allerta Temperatura", message);
+            await SendNotificationAsync(cityId, AppResources.TemperatureAlertTitle, message);
     }
 
     private async Task SendNotificationAsync(string cityId, string title, string message)

@@ -58,4 +58,61 @@
   <data name="SearchCity" xml:space="preserve">
     <value>Search a City</value>
   </data>
+    <data name="LastUpdate" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="PermissionsDeniedTitle" xml:space="preserve">
+    <value>Permissions Denied</value>
+  </data>
+  <data name="NotificationPermissionsDeniedMessage" xml:space="preserve">
+    <value>The permissions to show notifications have been denied. Please enable them in settings to receive weather alerts.</value>
+  </data>
+  <data name="LocationPermissionsDeniedMessage" xml:space="preserve">
+    <value>The permissions to access location have been denied. The app will use a default location instead.</value>
+  </data>
+  <data name="ConfirmDeletionTitle" xml:space="preserve">
+    <value>Confirm Deletion</value>
+  </data>
+  <data name="ConfirmDeletionMessage" xml:space="preserve">
+    <value>Are you sure you want to delete '{0}'?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="DeletionSuccessTitle" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="DeleteCitySuccessMessage" xml:space="preserve">
+    <value>City deleted from database</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="DeleteCityErrorMessage" xml:space="preserve">
+    <value>Unable to delete the city. Please try again.</value>
+  </data>
+  <data name="WeatherDataRetrievalErrorMessage" xml:space="preserve">
+    <value>Unable to retrieve weather data for the selected location.</value>
+  </data>
+  <data name="CityAlreadyExistsMessage" xml:space="preserve">
+    <value>This city is already in your list.</value>
+  </data>
+  <data name="SelectedLocationName" xml:space="preserve">
+    <value>Selected Location</value>
+  </data>
+  <data name="TemperatureBelowThreshold" xml:space="preserve">
+    <value>Temperature below threshold</value>
+  </data>
+  <data name="TemperatureAboveThreshold" xml:space="preserve">
+    <value>Temperature above threshold</value>
+  </data>
+  <data name="TemperatureAlertTitle" xml:space="preserve">
+    <value>Temperature Alert</value>
+  </data>
 </root>

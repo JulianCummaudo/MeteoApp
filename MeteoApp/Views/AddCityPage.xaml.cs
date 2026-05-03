@@ -1,6 +1,7 @@
 using MeteoApp.Models;
 using MeteoApp.Services;
 using MeteoApp.ViewModels;
+using MeteoApp.Resources.Strings;
 
 namespace MeteoApp;
 
@@ -22,7 +23,7 @@ public partial class AddCityPage : ContentPage
         var success = await _viewModel.AddCityAsync(selected);
         if (!success)
         {
-            await DisplayAlert("Errore", "Questa città è già presente", "OK");
+            await DisplayAlert(AppResources.ErrorTitle, AppResources.CityAlreadyExistsMessage, AppResources.OK);
             return;
         }
 

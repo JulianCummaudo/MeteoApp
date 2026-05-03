@@ -3,6 +3,7 @@ using Microsoft.Maui.Maps;
 using MeteoApp.Services;
 using MeteoApp.Models;
 using MeteoApp.ViewModels;
+using MeteoApp.Resources.Strings;
 
 namespace MeteoApp;
 
@@ -28,9 +29,9 @@ public partial class MapPage : ContentPage
         if (!permissionsGranted)
         {
             await DisplayAlert(
-                "Permessi negati",
-                "I permessi per accedere alla posizione sono stati negati.",
-                "OK");
+                AppResources.PermissionsDeniedTitle,
+                AppResources.LocationPermissionsDeniedMessage,
+                AppResources.OK);
             initialLocation = _viewModel.GetInitialLocation();
         }
         else
@@ -65,7 +66,6 @@ public partial class MapPage : ContentPage
         MyMap.MoveToRegion(region);
     }
 
-
     private void OnMapClickedWrapper(object sender, MapClickedEventArgs e)
     {
         _ = OnMapClicked(sender, e);
@@ -77,7 +77,7 @@ public partial class MapPage : ContentPage
 
         if (location == null)
         {
-            await DisplayAlert("Error", "Unable to get location from the map click.", "OK");
+            await DisplayAlert(AppResources.ErrorTitle, AppResources.LocationPermissionsDeniedMessage, AppResources.OK);
             return;
         }
 
@@ -85,7 +85,7 @@ public partial class MapPage : ContentPage
 
         if (meteoCityEntry == null)
         {
-            await DisplayAlert("Error", "Unable to retrieve weather data for the selected location.", "OK");
+            await DisplayAlert(AppResources.ErrorTitle, AppResources.WeatherDataRetrievalErrorMessage, AppResources.OK);
             return;
         }
 

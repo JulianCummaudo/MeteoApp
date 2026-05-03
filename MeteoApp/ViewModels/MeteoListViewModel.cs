@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using MeteoApp.Models;
 using MeteoApp.Services;
+using System.Diagnostics;
 
 namespace MeteoApp.ViewModels;
 
@@ -71,7 +72,7 @@ public class MeteoListViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error while loading entries: {ex.Message}");
+            Debug.WriteLine($"Error while loading entries: {ex.Message}");
         }
     }
 

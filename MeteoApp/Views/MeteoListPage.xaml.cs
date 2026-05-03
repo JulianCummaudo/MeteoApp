@@ -19,7 +19,15 @@ public partial class MeteoListPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
         await _viewModel.RefreshEntriesAsync();
+
+        bool permissionsGranted = await _viewModel.CheckNotificationPermissions();
+        if (!permissionsGranted)
+        {
+            await DisplayAlert("Permessi negati", "I permessi per mostrare le notifiche sono stati negati. Abilitali dalle impostazioni per visualizzare le allerte meteo.", "OK");
+            return;
+        }
     }
 
     private void OnListItemSelected(object sender, TappedEventArgs e)

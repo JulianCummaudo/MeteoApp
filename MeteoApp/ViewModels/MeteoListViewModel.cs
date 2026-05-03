@@ -79,5 +79,17 @@ public class MeteoListViewModel : BaseViewModel
     {
         await LoadEntriesFromDatabaseAsync();
     }
+
+    public async Task<bool> CheckNotificationPermissions()
+    {
+        var permissions = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+        if (permissions != PermissionStatus.Granted)
+        {
+            permissions = await Permissions.RequestAsync<Permissions.PostNotifications>();
+        }
+
+        return permissions == PermissionStatus.Granted;
+    }
 }
 

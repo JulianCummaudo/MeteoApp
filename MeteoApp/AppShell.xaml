@@ -8,13 +8,13 @@
                       Icon="home.svg"
                       ContentTemplate="{DataTemplate local:MeteoListPage}"/>
         <ShellContent Title="{x:Static res:AppResources.TabCurrentLocation}"
-                      Icon="dotnet_bot.svg"
+                      Icon="pin.svg"
                       ContentTemplate="{DataTemplate local:CurrentLocationPage}"/>
         <ShellContent Title="{x:Static res:AppResources.TabMap}"
                       Icon="map.svg"
                       ContentTemplate="{DataTemplate local:MapPage}"/>
         <ShellContent Title="{x:Static res:AppResources.TabBlazor}"
-                      Icon="map.svg"
+                      Icon="html.svg"
                       ContentTemplate="{DataTemplate local:BlazorPage}"/>
     </TabBar>
 

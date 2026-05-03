@@ -1,6 +1,6 @@
 ﻿using MeteoApp.ViewModels;
 using Microsoft.Extensions.Logging;
-
+using MeteoApp.Services;
 namespace MeteoApp;
 
 public static class MauiProgram
@@ -30,6 +30,10 @@ public static class MauiProgram
 		builder.Services.AddTransient<CurrentLocationPage>();
 		builder.Services.AddTransient<MapPage>();
 		builder.Services.AddTransient<MeteoItemPage>();
+
+		// Blazor
+		builder.Services.AddMauiBlazorWebView();
+		builder.Services.AddSingleton<MeteoService>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

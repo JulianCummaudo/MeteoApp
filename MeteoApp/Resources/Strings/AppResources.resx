@@ -22,6 +22,9 @@
 	<data name="TabMap" xml:space="preserve">
 		<value>Map</value>
 	</data>
+  <data name="TabBlazor" xml:space="preserve">
+    <value>Blazor</value>
+  </data>
 
   <data name="Temperature" xml:space="preserve">
     <value>Temperature</value>

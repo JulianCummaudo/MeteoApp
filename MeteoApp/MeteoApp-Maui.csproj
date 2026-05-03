@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')" />
 
 	<PropertyGroup>

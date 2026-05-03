@@ -94,11 +94,11 @@ namespace MeteoApp
             );
 
             // Test for notifications as soon as the app is opened
-            var oneTimeRequest = new OneTimeWorkRequest.Builder(Java.Lang.Class.FromType(typeof(MeteoWorker)))
-                .SetConstraints(constraints)
-                .SetInitialDelay(10, TimeUnit.Seconds)
-                .Build();
-            WorkManager.GetInstance(this).Enqueue(oneTimeRequest);
+            // var oneTimeRequest = new OneTimeWorkRequest.Builder(Java.Lang.Class.FromType(typeof(MeteoWorker)))
+            //     .SetConstraints(constraints)
+            //     .SetInitialDelay(10, TimeUnit.Seconds)
+            //     .Build();
+            // WorkManager.GetInstance(this).Enqueue(oneTimeRequest);
         }
 
         private void CreateNotificationChannelIfNeeded()

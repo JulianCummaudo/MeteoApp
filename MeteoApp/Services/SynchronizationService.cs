@@ -54,7 +54,6 @@ public class SynchronizationService
         {
             await _account.Get();
             _isAuthenticated = true;
-            Debug.WriteLine("Session already active.");
             return;
         }
         catch
@@ -69,11 +68,10 @@ public class SynchronizationService
             await _account.CreateEmailPasswordSession(email, password);
 
             _isAuthenticated = true;
-            Debug.WriteLine("Login successful.");
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Login failed: {ex}");
+            Debug.WriteLine($"Login failed: {ex.Message}");
             throw;
         }
     }
@@ -106,7 +104,7 @@ public class SynchronizationService
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Parse error: {ex}");
+                Debug.WriteLine($"Parse error: {ex.Message}");
             }
         }
 
@@ -125,12 +123,10 @@ public class SynchronizationService
             {
                 await _databaseService.AddEntryAsync(city);
             }
-
-            Debug.WriteLine($"Sync completed ({remoteCities.Count} cities).");
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Sync failed: {ex}");
+            Debug.WriteLine($"Sync failed: {ex.Message}");
         }
     }
     public async Task<bool> AddCityAsync(CityEntry city)
@@ -156,13 +152,12 @@ public class SynchronizationService
             city.Id = document.Id;
 
             await _databaseService.AddEntryAsync(city);
-            Debug.WriteLine($"City added: {city.Name}");
 
             return true;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Add city failed: {ex}");
+            Debug.WriteLine($"Add city failed: {ex.Message}");
             return false;
         }
     }
@@ -202,7 +197,7 @@ public class SynchronizationService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Remove failed: {ex}");
+            Debug.WriteLine($"Remove failed: {ex.Message}");
             return false;
         }
     }

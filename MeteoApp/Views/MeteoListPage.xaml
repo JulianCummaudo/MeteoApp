@@ -9,7 +9,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add"
-                Clicked="OnItemAdded"/>
+                     Clicked="OnItemAdded"/>
     </ContentPage.ToolbarItems>
 
     <Grid>

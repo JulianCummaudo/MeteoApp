@@ -1,4 +1,6 @@
-﻿using MeteoApp.Models;
+﻿using System.Diagnostics;
+using MeteoApp.Models;
+using MeteoApp.Services;
 using MeteoApp.ViewModels;
 
 namespace MeteoApp;
@@ -6,11 +8,13 @@ namespace MeteoApp;
 public partial class MeteoListPage : ContentPage
 {
     private MeteoListViewModel _viewModel;
+    private NotificationService _notificationService;
 
     public MeteoListPage(MeteoListViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;
+        _notificationService = new NotificationService();
         BindingContext = viewModel;
     }
 

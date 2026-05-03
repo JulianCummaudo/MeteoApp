@@ -7,13 +7,12 @@ using MeteoApp;
 
 public class LocalNotificationsService
 {
-    private static readonly double TEMP_MIN = 20.0;
-    private static readonly double TEMP_MAX = 22.0;
+    private static readonly double TEMP_MIN = 4.0;
+    private static readonly double TEMP_MAX = 30.0;
     public static readonly string CHANNEL_ID = "meteo-notifications";
 
     public async Task CheckAndNotifyAsync(int cityId, string cityName, double temperature)
     {
-        Debug.WriteLine($"Controllo temperatura per {cityName}: {temperature}°C");
         string? message = null;
 
         if (temperature < TEMP_MIN)
@@ -27,7 +26,6 @@ public class LocalNotificationsService
 
     private async Task SendNotificationAsync(int cityId, string title, string message)
     {
-        Debug.WriteLine($"Invio notifica: {title} - {message}");
         var context = Android.App.Application.Context;
         var mNotificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService)!;
 

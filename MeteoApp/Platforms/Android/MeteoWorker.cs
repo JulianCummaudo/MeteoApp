@@ -18,7 +18,7 @@ public class MeteoWorker : Worker
 
     public override Result DoWork()
     {
-        // Do work è sincrono
+        // Do work is synchronous
         try
         {
             CheckTemperaturesAsync().GetAwaiter().GetResult();
@@ -26,7 +26,7 @@ public class MeteoWorker : Worker
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.Message);
+            System.Diagnostics.Debug.WriteLine($"Error in MeteoWorker: {ex.Message}");
             return Result.InvokeFailure();
         }
     }

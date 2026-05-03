@@ -40,7 +40,7 @@ public class MainActivity : MauiAppCompatActivity
         if (intent == null)
             return;
 
-        var cityId = intent.GetIntExtra("city_id", -1);
+        var cityId = intent.GetIntExtra("cityId", -1);
         if (cityId == -1)
             return;
 
@@ -88,24 +88,24 @@ public class MainActivity : MauiAppCompatActivity
             .SetRequiredNetworkType(NetworkType.Connected)
             .Build();
 
-        /*var periodicRequest = PeriodicWorkRequest.Builder
+        var periodicRequest = PeriodicWorkRequest.Builder
             .From<MeteoWorker>(SCHEDULE_PERIOD, TimeUnit.Minutes)
             .SetConstraints(constraints)
             .Build();
 
-        // Serve per evitare di creare più worker se l'app viene aperta più volte
+        // Used to avoid creating multiple workers if the app is opened multiple times
         WorkManager.GetInstance(this).EnqueueUniquePeriodicWork(
             "MeteoTemperatureCheck",
             ExistingPeriodicWorkPolicy.Keep!,
             periodicRequest
-        );*/
+        );
 
         // OneTimeWorkRequest.Builder(TestWorker.class).setConstraints(constraint).build();
-        var oneTimeRequest = new OneTimeWorkRequest.Builder(Java.Lang.Class.FromType(typeof(MeteoWorker)))
+        /*var oneTimeRequest = new OneTimeWorkRequest.Builder(Java.Lang.Class.FromType(typeof(MeteoWorker)))
             .SetConstraints(constraints)
             .SetInitialDelay(10, TimeUnit.Seconds)
             .Build();
-        WorkManager.GetInstance(this).Enqueue(oneTimeRequest);
+        WorkManager.GetInstance(this).Enqueue(oneTimeRequest);*/
     }
 }
 

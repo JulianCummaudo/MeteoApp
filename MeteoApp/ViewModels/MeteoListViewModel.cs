@@ -71,7 +71,7 @@ public class MeteoListViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Errore nel caricamento delle entry: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"Error while loading entries: {ex.Message}");
         }
     }
 

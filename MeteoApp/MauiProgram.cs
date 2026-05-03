@@ -9,6 +9,8 @@ using Plugin.Firebase.Bundled.Platforms.iOS;
 #elif ANDROID
 using Plugin.Firebase.Bundled.Platforms.Android;
 #endif
+using MeteoApp.Services;
+
 
 namespace MeteoApp;
 

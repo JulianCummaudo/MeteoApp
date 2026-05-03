@@ -28,16 +28,18 @@ namespace MeteoApp
         HandleIntent(Intent);
     }
 
-    protected override void OnNewIntent(Android.Content.Intent intent)
+    protected override void OnNewIntent(Intent intent)
     {
         base.OnNewIntent(intent);
         HandleIntent(intent);
     }
 
-    private void HandleIntent(Android.Content.Intent intent)
+    private void HandleIntent(Intent intent)
     {
         if (intent == null)
             return;
+
+        FirebaseCloudMessagingImplementation.OnNewIntent(intent);
 
         var cityId = intent.GetIntExtra("cityId", -1);
         if (cityId == -1)
@@ -66,21 +68,6 @@ namespace MeteoApp
         });
     }
 
-    private void CreateNotificationChannelIfNeeded()
-    {
-        if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-        {
-            CreateLocalNotificationChannel();
-        }
-    }
-
-    private void CreateLocalNotificationChannel()
-    {
-        var notificationManager = (NotificationManager)GetSystemService(NotificationService)!;
-        var channel = new NotificationChannel(LocalNotificationsService.CHANNEL_ID, "Meteo Alerts", NotificationImportance.High);
-        notificationManager.CreateNotificationChannel(channel);
-    }
-
     private void ScheduleMeteoWorker()
     {
         var constraints = new Constraints.Builder()
@@ -106,32 +93,29 @@ namespace MeteoApp
             .Build();
         WorkManager.GetInstance(this).Enqueue(oneTimeRequest);*/
     }
-}
 
-        protected override void OnNewIntent(Intent intent)
+    private void CreateNotificationChannelIfNeeded()
+    {
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
         {
-            base.OnNewIntent(intent);
-            HandleIntent(intent);
+            CreateLocalNotificationChannel();
+            CreateFirebaseNotificationsChannel();
         }
+    }
 
-        private static void HandleIntent(Intent intent)
-        {
-            FirebaseCloudMessagingImplementation.OnNewIntent(intent);
-        }
+    private void CreateLocalNotificationChannel()
+    {
+        var notificationManager = (NotificationManager)GetSystemService(NotificationService)!;
+        var channel = new NotificationChannel(LocalNotificationsService.CHANNEL_ID, "Meteo Alerts", NotificationImportance.High);
+        notificationManager.CreateNotificationChannel(channel);
+    }
 
-        private void CreateNotificationChannelIfNeeded()
-        {
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-                CreateNotificationChannel();
-        }
-
-        private void CreateNotificationChannel()
-        {
-            var channelId = $"{PackageName}.general";
-            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
-            var channel = new NotificationChannel(channelId, "General", NotificationImportance.Default);
-            notificationManager.CreateNotificationChannel(channel);
-            FirebaseCloudMessagingImplementation.ChannelId = channelId;
-        }
+    private void CreateFirebaseNotificationsChannel()
+    {
+        var channelId = $"{PackageName}.general";
+        var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+        var channel = new NotificationChannel(channelId, "General", NotificationImportance.Default);
+        notificationManager.CreateNotificationChannel(channel);
+        FirebaseCloudMessagingImplementation.ChannelId = channelId;
     }
 }

@@ -21,12 +21,12 @@ public static class MauiProgram
 			.UseMauiApp<App>()
 			.UseMauiMaps()
 			.UseLocalNotification()
+			.RegisterFirebaseServices()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
-            .RegisterFirebaseServices()
 
 		// ViewModels
 		builder.Services.AddSingleton<MeteoListViewModel>();
@@ -43,16 +43,16 @@ public static class MauiProgram
 		builder.Services.AddTransient<MeteoItemPage>();
 
 #if DEBUG
-        builder.Logging.AddDebug();
+		builder.Logging.AddDebug();
 #endif
 		return builder.Build();
 	}
-}
 
-    private static MauiAppBuilder RegisterFirebaseServices(this MauiAppBuilder builder)
-    {
-        builder.ConfigureLifecycleEvents(events =>
-        {
+
+	private static MauiAppBuilder RegisterFirebaseServices(this MauiAppBuilder builder)
+	{
+		builder.ConfigureLifecycleEvents(events =>
+		{
 #if IOS
             events.AddiOS(iOS => iOS.WillFinishLaunching((_, __) =>
             {
@@ -64,8 +64,8 @@ public static class MauiProgram
                 CrossFirebase.Initialize(activity, () => Platform.CurrentActivity,
                     new CrossFirebaseSettings(isCloudMessagingEnabled: true))));
 #endif
-        });
+		});
 
-        return builder;
-    }
+		return builder;
+	}
 }

@@ -1,8 +1,8 @@
 .DS_Store
-/bin
-/obj
+MeteoApp/bin
+MeteoApp/obj
 secrets.env
 Directory.Build.props.user
 google-services.json
 MeteoApp.sln
-../.vscode
+.vscode

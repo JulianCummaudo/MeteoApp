@@ -112,8 +112,8 @@
     {
         try
         {
-            // città fissa per demo Razor
-            var location = new Location(46.0037, 8.9511); // Lugano
+            // See the weather in Lugano
+            var location = new Location(46.0037, 8.9511);
 
             meteo = await MeteoService.GetConditionsAsync(location);
 

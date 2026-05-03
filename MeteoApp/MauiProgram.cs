@@ -30,11 +30,15 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
+		// Services
+		builder.Services.AddSingleton<LanguageService>();
+
 		// ViewModels
 		builder.Services.AddSingleton<MeteoListViewModel>();
 		builder.Services.AddSingleton<AddCityViewModel>();
 		builder.Services.AddSingleton<CurrentLocationViewModel>();
 		builder.Services.AddSingleton<MapViewModel>();
+		builder.Services.AddSingleton<SettingsViewModel>();
 		builder.Services.AddTransient<MeteoItemViewModel>();
 
 		// Pages
@@ -43,6 +47,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<CurrentLocationPage>();
 		builder.Services.AddTransient<MapPage>();
 		builder.Services.AddTransient<MeteoItemPage>();
+		builder.Services.AddTransient<SettingsPage>();
 
 		// Blazor
 		builder.Services.AddMauiBlazorWebView();
@@ -66,9 +71,9 @@ public static class MauiProgram
                 return false;
             }));
 #elif ANDROID
-            events.AddAndroid(android => android.OnCreate((activity, _) =>
-                CrossFirebase.Initialize(activity, () => Platform.CurrentActivity,
-                    new CrossFirebaseSettings(isCloudMessagingEnabled: true))));
+			events.AddAndroid(android => android.OnCreate((activity, _) =>
+				CrossFirebase.Initialize(activity, () => Platform.CurrentActivity,
+					new CrossFirebaseSettings(isCloudMessagingEnabled: true))));
 #endif
 		});
 

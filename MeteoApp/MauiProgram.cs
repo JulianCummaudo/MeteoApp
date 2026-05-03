@@ -1,7 +1,14 @@
-﻿using MeteoApp.ViewModels;
+using MeteoApp.ViewModels;
 using Microsoft.Extensions.Logging;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.Core.Models.AndroidOption;
+using Microsoft.Maui.LifecycleEvents;
+using Plugin.Firebase.Bundled.Shared;
+#if IOS
+using Plugin.Firebase.Bundled.Platforms.iOS;
+#elif ANDROID
+using Plugin.Firebase.Bundled.Platforms.Android;
+#endif
 
 namespace MeteoApp;
 
@@ -19,6 +26,7 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
+            .RegisterFirebaseServices()
 
 		// ViewModels
 		builder.Services.AddSingleton<MeteoListViewModel>();
@@ -35,9 +43,29 @@ public static class MauiProgram
 		builder.Services.AddTransient<MeteoItemPage>();
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 		return builder.Build();
 	}
 }
 
+    private static MauiAppBuilder RegisterFirebaseServices(this MauiAppBuilder builder)
+    {
+        builder.ConfigureLifecycleEvents(events =>
+        {
+#if IOS
+            events.AddiOS(iOS => iOS.WillFinishLaunching((_, __) =>
+            {
+                CrossFirebase.Initialize(new CrossFirebaseSettings(isCloudMessagingEnabled: true));
+                return false;
+            }));
+#elif ANDROID
+            events.AddAndroid(android => android.OnCreate((activity, _) =>
+                CrossFirebase.Initialize(activity, () => Platform.CurrentActivity,
+                    new CrossFirebaseSettings(isCloudMessagingEnabled: true))));
+#endif
+        });
+
+        return builder;
+    }
+}

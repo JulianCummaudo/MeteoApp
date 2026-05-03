@@ -81,15 +81,15 @@ public class AddCityViewModel : BaseViewModel
         try
         {
             await Task.Delay(400, token);
+
             var results = await _geolocationService.SearchCitiesAsync(query, RESULT_LIMIT);
-            Debug.WriteLine(string.Join(", ", results.Select(r => r.Name)));
+
             if (token.IsCancellationRequested) return;
 
             SearchResults = new ObservableCollection<GeolocationResult>(results);
             ResultsVisible = results.Count != 0;
         }
-        catch (TaskCanceledException)
-        { }
+        catch (TaskCanceledException) { }
         finally
         {
             IsLoading = false;
@@ -119,7 +119,7 @@ public class AddCityViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Errore nell'aggiunta dell'entry: {ex.Message}");
+            Debug.WriteLine($"Errore while adding entry: {ex.Message}");
             return false;
         }
     }

@@ -29,6 +29,14 @@ public class DatabaseService
         return await _database.Table<CityEntry>().ToListAsync();
     }
 
+    public async Task<CityEntry> GetEntryByIdAsync(int id)
+    {
+        if (_database == null)
+            await InitAsync();
+
+        return await _database.Table<CityEntry>().FirstOrDefaultAsync(e => e.Id == id);
+    }
+
     public async Task<CityEntry> GetEntryByLocationAsync(Location location)
     {
         if (_database == null)
@@ -70,7 +78,7 @@ public class DatabaseService
 
         return await _database.DeleteAsync(entry);
     }
-    
+
     public async Task<int> ClearAllEntriesAsync()
     {
         if (_database == null)

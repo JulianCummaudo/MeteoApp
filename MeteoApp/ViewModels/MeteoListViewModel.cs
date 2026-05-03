@@ -71,13 +71,25 @@ public class MeteoListViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Errore nel caricamento delle entry: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"Error while loading entries: {ex.Message}");
         }
     }
 
     public async Task RefreshEntriesAsync()
     {
         await LoadEntriesFromDatabaseAsync();
+    }
+
+    public async Task<bool> CheckNotificationPermissions()
+    {
+        var permissions = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+        if (permissions != PermissionStatus.Granted)
+        {
+            permissions = await Permissions.RequestAsync<Permissions.PostNotifications>();
+        }
+
+        return permissions == PermissionStatus.Granted;
     }
 }
 

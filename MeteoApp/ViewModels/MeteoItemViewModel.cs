@@ -34,6 +34,7 @@ public class MeteoItemViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
+            Debug.WriteLine($"Error deleting city: {ex.Message}");
             return false;
         }
     }

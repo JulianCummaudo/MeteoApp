@@ -26,7 +26,7 @@ public class CurrentLocationViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Errore meteo: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"Meteo error: {ex.Message}");
         }
     }
 

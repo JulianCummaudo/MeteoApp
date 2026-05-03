@@ -3,6 +3,9 @@
 ## Project for Mobile application development
 
 # Guida all'utilizzo
+### APK
+All'interno della cartella `Release` è possibile trovare il file apk per installare subito l'applicazione
+
 ### Pagina home
 All'avvio dell'applicazione viene aperta la pagina principale, in cui è possibile aggiungere varie città per monitorarne la meteo.
 

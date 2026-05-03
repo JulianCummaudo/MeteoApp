@@ -7,6 +7,7 @@ namespace MeteoApp.ViewModels;
 public class MeteoItemViewModel : BaseViewModel
 {
     private readonly DatabaseService _databaseService = new DatabaseService();
+    private readonly SynchronizationService _synchronizationService = new SynchronizationService();
 
     private MeteoCityEntry _entry;
 
@@ -27,8 +28,7 @@ public class MeteoItemViewModel : BaseViewModel
 
         try
         {
-            await _databaseService.InitAsync();
-            await _databaseService.DeleteEntryAsync(_entry.City);
+            await _synchronizationService.RemoveCityAsync(_entry.City);
 
             return true;
         }

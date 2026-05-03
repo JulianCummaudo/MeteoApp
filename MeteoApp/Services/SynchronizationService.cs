@@ -95,6 +95,7 @@ public class SynchronizationService
             {
                 var city = new CityEntry
                 {
+                    Id = doc.Id,
                     Name = doc.Data["name"]?.ToString() ?? "",
                     Country = doc.Data["country"]?.ToString() ?? "",
                     Lat = Convert.ToDouble(doc.Data["lat"]),
@@ -161,8 +162,7 @@ public class SynchronizationService
             return false;
         }
     }
-
-    public async Task<bool> RemoveCityAsync(string cityName)
+    public async Task<bool> RemoveCityAsync(CityEntry city)
     {
         try
         {
@@ -174,7 +174,7 @@ public class SynchronizationService
             );
 
             var doc = docs.Documents.FirstOrDefault(d =>
-                d.Data["name"]?.ToString() == cityName
+                d.Id == city.Id
             );
 
             if (doc != null)
@@ -186,9 +186,14 @@ public class SynchronizationService
                 );
             }
 
-            //await _databaseService.DeleteEntryAsync(cityName);
+            if (_databaseService != null)
+            {
+                if (city != null)
+                {
+                    await _databaseService.DeleteEntryAsync(city);
+                }
+            }
 
-            Debug.WriteLine($"Removed city: {cityName}");
             return true;
         }
         catch (Exception ex)

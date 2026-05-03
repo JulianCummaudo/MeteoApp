@@ -5,8 +5,8 @@ namespace MeteoApp.Models;
 [Table("cities")]
 public class CityEntry
 {
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
+    [PrimaryKey]
+    public string Id { get; set; }
 
     [MaxLength(250)]
     public string Name { get; set; }

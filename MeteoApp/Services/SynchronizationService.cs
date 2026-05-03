@@ -1,108 +1,213 @@
+using System.Diagnostics;
 using Appwrite;
 using Appwrite.Models;
 using Appwrite.Services;
+using MeteoApp.Models;
 
 namespace MeteoApp.Services;
 
 public class SynchronizationService
 {
     private static readonly string APPWRITE_URL_KEY = "APPWRITE_URL";
-    private static readonly string APPWRITE_API_KEY = "APPWRITE_API_KEY";
     private static readonly string APPWRITE_PROJECT_ID_KEY = "APPWRITE_PROJECT_ID";
+    private static readonly string APPWRITE_DATABASE_ID_KEY = "APPWRITE_DATABASE_ID";
+    private static readonly string APPWRITE_COLLECTION_ID_KEY = "APPWRITE_COLLECTION_ID";
+
+    // USER FISSO
+    private static readonly string APPWRITE_EMAIL_KEY = "APPWRITE_EMAIL";
+    private static readonly string APPWRITE_PASSWORD_KEY = "APPWRITE_PASSWORD";
+
+    private readonly DatabaseService _databaseService;
 
     private readonly Client _client;
-    private string _databaseId;
-    private string _collectionId;
+    private readonly Account _account;
+    private readonly Databases _databases;
+
+    private readonly string _databaseId;
+    private readonly string _collectionId;
+
+    private bool _isAuthenticated = false;
 
     public SynchronizationService()
     {
         var endpoint = SecretsService.Get(APPWRITE_URL_KEY);
         var projectId = SecretsService.Get(APPWRITE_PROJECT_ID_KEY);
-        var apiKey = SecretsService.Get(APPWRITE_API_KEY);
+
+        _databaseId = SecretsService.Get(APPWRITE_DATABASE_ID_KEY);
+        _collectionId = SecretsService.Get(APPWRITE_COLLECTION_ID_KEY);
 
         _client = new Client()
             .SetEndpoint(endpoint)
-            .SetProject(projectId)
-            .SetKey(apiKey);
+            .SetProject(projectId);
+
+        _account = new Account(_client);
+        _databases = new Databases(_client);
+
+        _databaseService = new DatabaseService();
     }
 
-    public async Task CreateDatabaseIfNotExistsAsync()
+    private async Task LoginAsync()
     {
-        var existingDatabaseId = Preferences.Get("appwrite_database_id", null);
-        var existingCollectionId = Preferences.Get("appwrite_collection_id", null);
+        if (_isAuthenticated)
+            return;
 
-        if (existingDatabaseId != null && existingCollectionId != null)
+        try
         {
-            _databaseId = existingDatabaseId;
-            _collectionId = existingCollectionId;
-            return; // già creati, non rifare
+            // Controlla se esiste già una sessione valida
+            await _account.Get();
+
+            _isAuthenticated = true;
+
+            Debug.WriteLine("Already authenticated.");
+        }
+        catch
+        {
+            try
+            {
+                var email = SecretsService.Get(APPWRITE_EMAIL_KEY);
+                var password = SecretsService.Get(APPWRITE_PASSWORD_KEY);
+
+                await _account.CreateEmailPasswordSession(
+                    email: email,
+                    password: password
+                );
+
+                _isAuthenticated = true;
+
+                Debug.WriteLine("Login successful.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Login failed: {ex}");
+                throw;
+            }
+        }
+    }
+
+    private async Task<List<CityEntry>> GetAllCitiesAsync()
+    {
+        var documents = await _databases.ListDocuments(
+            databaseId: _databaseId,
+            collectionId: _collectionId
+        );
+
+        var cities = new List<CityEntry>();
+
+        foreach (var doc in documents.Documents)
+        {
+            try
+            {
+                var city = new CityEntry
+                {
+                    Id = Convert.ToInt32(doc.Data["Id"]),
+                    Name = doc.Data["Name"]?.ToString() ?? "",
+                    Country = doc.Data["Country"]?.ToString() ?? "",
+                    Lat = Convert.ToDouble(doc.Data["Lat"]),
+                    Lon = Convert.ToDouble(doc.Data["Lon"])
+                };
+
+                cities.Add(city);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error parsing city document: {ex}");
+            }
         }
 
-        var databases = new Databases(_client);
-        Database meteoDatabase;
-        Collection meteoCollection;
-
-        meteoDatabase = await databases.Create(
-            databaseId: ID.Unique(),
-            name: "MeteoAppDatabase"
-        );
-
-        meteoCollection = await databases.CreateCollection(
-            databaseId: meteoDatabase.Id,
-            collectionId: ID.Unique(),
-            name: "cities"
-        );
-
-        _databaseId = meteoDatabase.Id;
-        _collectionId = meteoCollection.Id;
-
-        Preferences.Set("appwrite_database_id", meteoDatabase.Id);
-        Preferences.Set("appwrite_collection_id", meteoCollection.Id);
-
-        await databases.CreateIntegerAttribute(
-            databaseId: meteoDatabase.Id,
-            collectionId: meteoCollection.Id,
-            key: "Id",
-            required: true
-        );
-
-        await databases.CreateStringAttribute(
-            databaseId: meteoDatabase.Id,
-            collectionId: meteoCollection.Id,
-            key: "Name",
-            size: 250,
-            required: true
-        );
-
-        await databases.CreateStringAttribute(
-            databaseId: meteoDatabase.Id,
-            collectionId: meteoCollection.Id,
-            key: "Country",
-            size: 10,
-            required: true
-        );
-
-        await databases.CreateFloatAttribute(
-            databaseId: meteoDatabase.Id,
-            collectionId: meteoCollection.Id,
-            key: "Lat",
-            required: true
-        );
-
-        await databases.CreateFloatAttribute(
-            databaseId: meteoDatabase.Id,
-            collectionId: meteoCollection.Id,
-            key: "Lon",
-            required: true
-        );
+        return cities;
     }
 
-    public async Task GetRemoteCitiesAsync()
+    public async Task SynchronizeDatabaseAsync()
     {
-        var databases = new Databases(_client);
-        var documents = await databases.ListDocuments(
-            databaseId: meteoDatabase.Id,
-            collectionId: meteoCollection.Id
-        );
+        try
+        {
+            await LoginAsync();
+
+            var remoteCities = await GetAllCitiesAsync();
+
+            Debug.WriteLine($"Fetched {remoteCities.Count} cities from Appwrite.");
+
+            await _databaseService.ClearAllEntriesAsync();
+            foreach (var city in remoteCities)
+            {
+                await _databaseService.AddEntryAsync(city);
+            }
+
+            Debug.WriteLine("Database synchronization completed.");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Synchronization failed: {ex}");
+            Debug.WriteLine("Using local database fallback.");
+        }
+    }
+
+    public async Task<bool> AddCityAsync(CityEntry city)
+    {
+        try
+        {
+            await LoginAsync();
+
+            await _databaseService.AddEntryAsync(city);
+
+            await _databases.CreateDocument(
+                databaseId: _databaseId,
+                collectionId: _collectionId,
+                documentId: ID.Unique(),
+                data: new Dictionary<string, object>
+                {
+                    { "Id", city.Id },
+                    { "Name", city.Name },
+                    { "Country", city.Country },
+                    { "Lat", city.Lat },
+                    { "Lon", city.Lon }
+                }
+            );
+
+            Debug.WriteLine($"City added successfully: {city.Name}");
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error adding city: {ex}");
+            return false;
+        }
+    }
+
+    public async Task<bool> RemoveCityAsync(int cityId)
+    {
+        try
+        {
+            await LoginAsync();
+
+            // Cerca documento remoto
+            var documents = await _databases.ListDocuments(
+                databaseId: _databaseId,
+                collectionId: _collectionId
+            );
+
+            var document = documents.Documents.FirstOrDefault(d =>
+                Convert.ToInt32(d.Data["Id"]) == cityId
+            );
+
+            if (document != null)
+            {
+                await _databases.DeleteDocument(
+                    databaseId: _databaseId,
+                    collectionId: _collectionId,
+                    documentId: document.Id
+                );
+            }
+
+            Debug.WriteLine($"City removed successfully: {cityId}");
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error removing city: {ex}");
+            return false;
+        }
     }
 }

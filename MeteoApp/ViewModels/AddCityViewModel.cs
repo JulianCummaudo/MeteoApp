@@ -11,6 +11,7 @@ public class AddCityViewModel : BaseViewModel
     private static readonly int RESULT_LIMIT = 5;
     private readonly GeolocationService _geolocationService;
     private readonly DatabaseService _databaseService;
+    private readonly SynchronizationService _syncService;
     private CancellationTokenSource _debounceCts;
 
     private bool _isLoading;
@@ -62,6 +63,7 @@ public class AddCityViewModel : BaseViewModel
     {
         _geolocationService = new GeolocationService();
         _databaseService = new DatabaseService();
+        _syncService = new SynchronizationService();
     }
 
     public async Task SearchCitiesAsync(string query)
@@ -109,17 +111,17 @@ public class AddCityViewModel : BaseViewModel
         try
         {
             var existsEntry = await _databaseService.ExistsEntryAsync(city.Name);
-
             if (existsEntry)
                 return false;
 
-            await _databaseService.AddEntryAsync(city);
+            await _syncService.AddCityAsync(city);
+            await _syncService.SynchronizeDatabaseAsync();
 
             return true;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Errore nell'aggiunta dell'entry: {ex.Message}");
+            Debug.WriteLine($"Error while adding city: {ex.Message}");
             return false;
         }
     }

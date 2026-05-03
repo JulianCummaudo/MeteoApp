@@ -8,14 +8,13 @@ namespace MeteoApp.Services;
 
 public class SynchronizationService
 {
-    private static readonly string APPWRITE_URL_KEY = "APPWRITE_URL";
-    private static readonly string APPWRITE_PROJECT_ID_KEY = "APPWRITE_PROJECT_ID";
-    private static readonly string APPWRITE_DATABASE_ID_KEY = "APPWRITE_DATABASE_ID";
-    private static readonly string APPWRITE_COLLECTION_ID_KEY = "APPWRITE_COLLECTION_ID";
+    private const string APPWRITE_URL_KEY = "APPWRITE_URL";
+    private const string APPWRITE_PROJECT_ID_KEY = "APPWRITE_PROJECT_ID";
+    private const string APPWRITE_DATABASE_ID_KEY = "APPWRITE_DATABASE_ID";
+    private const string APPWRITE_COLLECTION_ID_KEY = "APPWRITE_COLLECTION_ID";
 
-    // USER FISSO
-    private static readonly string APPWRITE_EMAIL_KEY = "APPWRITE_EMAIL";
-    private static readonly string APPWRITE_PASSWORD_KEY = "APPWRITE_PASSWORD";
+    private const string APPWRITE_EMAIL_KEY = "APPWRITE_EMAIL";
+    private const string APPWRITE_PASSWORD_KEY = "APPWRITE_PASSWORD";
 
     private readonly DatabaseService _databaseService;
 
@@ -26,7 +25,7 @@ public class SynchronizationService
     private readonly string _databaseId;
     private readonly string _collectionId;
 
-    private bool _isAuthenticated = false;
+    private bool _isAuthenticated;
 
     public SynchronizationService()
     {
@@ -46,71 +45,67 @@ public class SynchronizationService
         _databaseService = new DatabaseService();
     }
 
-    private async Task LoginAsync()
+    private async Task EnsureLoginAsync()
     {
         if (_isAuthenticated)
             return;
 
         try
         {
-            // Controlla se esiste già una sessione valida
             await _account.Get();
-
             _isAuthenticated = true;
-
-            Debug.WriteLine("Already authenticated.");
+            Debug.WriteLine("Session already active.");
+            return;
         }
         catch
         {
-            try
-            {
-                var email = SecretsService.Get(APPWRITE_EMAIL_KEY);
-                var password = SecretsService.Get(APPWRITE_PASSWORD_KEY);
+        }
 
-                await _account.CreateEmailPasswordSession(
-                    email: email,
-                    password: password
-                );
+        try
+        {
+            var email = SecretsService.Get(APPWRITE_EMAIL_KEY);
+            var password = SecretsService.Get(APPWRITE_PASSWORD_KEY);
 
-                _isAuthenticated = true;
+            await _account.CreateEmailPasswordSession(email, password);
 
-                Debug.WriteLine("Login successful.");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Login failed: {ex}");
-                throw;
-            }
+            _isAuthenticated = true;
+            Debug.WriteLine("Login successful.");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Login failed: {ex}");
+            throw;
         }
     }
 
-    private async Task<List<CityEntry>> GetAllCitiesAsync()
+    public async Task<List<CityEntry>> GetRemoteCitiesAsync()
     {
-        var documents = await _databases.ListDocuments(
+        await EnsureLoginAsync();
+
+        var result = await _databases.ListDocuments(
             databaseId: _databaseId,
             collectionId: _collectionId
         );
 
         var cities = new List<CityEntry>();
 
-        foreach (var doc in documents.Documents)
+        foreach (var doc in result.Documents)
         {
             try
             {
                 var city = new CityEntry
                 {
-                    Id = Convert.ToInt32(doc.Data["Id"]),
-                    Name = doc.Data["Name"]?.ToString() ?? "",
-                    Country = doc.Data["Country"]?.ToString() ?? "",
-                    Lat = Convert.ToDouble(doc.Data["Lat"]),
-                    Lon = Convert.ToDouble(doc.Data["Lon"])
+                    Name = doc.Data["name"]?.ToString() ?? "",
+                    Country = doc.Data["country"]?.ToString() ?? "",
+                    Lat = Convert.ToDouble(doc.Data["lat"]),
+                    Lon = Convert.ToDouble(doc.Data["lon"])
                 };
 
                 cities.Add(city);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error parsing city document: {ex}");
+                Debug.WriteLine($"Parse error: {ex}");
             }
         }
 
@@ -121,92 +116,84 @@ public class SynchronizationService
     {
         try
         {
-            await LoginAsync();
-
-            var remoteCities = await GetAllCitiesAsync();
-
-            Debug.WriteLine($"Fetched {remoteCities.Count} cities from Appwrite.");
+            var remoteCities = await GetRemoteCitiesAsync();
 
             await _databaseService.ClearAllEntriesAsync();
+
             foreach (var city in remoteCities)
             {
                 await _databaseService.AddEntryAsync(city);
             }
 
-            Debug.WriteLine("Database synchronization completed.");
+            Debug.WriteLine($"Sync completed ({remoteCities.Count} cities).");
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Synchronization failed: {ex}");
-            Debug.WriteLine("Using local database fallback.");
+            Debug.WriteLine($"Sync failed: {ex}");
         }
     }
-
     public async Task<bool> AddCityAsync(CityEntry city)
     {
+        var cityData = new Dictionary<string, object>
+        {
+            { "name", city.Name },
+            { "country", city.Country },
+            { "lat", city.Lat },
+            { "lon", city.Lon }
+        };
         try
         {
-            await LoginAsync();
-
+            await EnsureLoginAsync();
             await _databaseService.AddEntryAsync(city);
-
             await _databases.CreateDocument(
                 databaseId: _databaseId,
                 collectionId: _collectionId,
                 documentId: ID.Unique(),
-                data: new Dictionary<string, object>
-                {
-                    { "Id", city.Id },
-                    { "Name", city.Name },
-                    { "Country", city.Country },
-                    { "Lat", city.Lat },
-                    { "Lon", city.Lon }
-                }
+                data: cityData
             );
 
-            Debug.WriteLine($"City added successfully: {city.Name}");
-
+            Debug.WriteLine($"City added: {city.Name}");
             return true;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error adding city: {ex}");
+            Debug.WriteLine($"Add city failed: {ex}");
             return false;
         }
     }
 
-    public async Task<bool> RemoveCityAsync(int cityId)
+    public async Task<bool> RemoveCityAsync(string cityName)
     {
         try
         {
-            await LoginAsync();
+            await EnsureLoginAsync();
 
-            // Cerca documento remoto
-            var documents = await _databases.ListDocuments(
+            var docs = await _databases.ListDocuments(
                 databaseId: _databaseId,
                 collectionId: _collectionId
             );
 
-            var document = documents.Documents.FirstOrDefault(d =>
-                Convert.ToInt32(d.Data["Id"]) == cityId
+            var doc = docs.Documents.FirstOrDefault(d =>
+                d.Data["name"]?.ToString() == cityName
             );
 
-            if (document != null)
+            if (doc != null)
             {
                 await _databases.DeleteDocument(
                     databaseId: _databaseId,
                     collectionId: _collectionId,
-                    documentId: document.Id
+                    documentId: doc.Id
                 );
             }
 
-            Debug.WriteLine($"City removed successfully: {cityId}");
+            //await _databaseService.DeleteEntryAsync(cityName);
 
+            Debug.WriteLine($"Removed city: {cityName}");
             return true;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error removing city: {ex}");
+            Debug.WriteLine($"Remove failed: {ex}");
             return false;
         }
     }

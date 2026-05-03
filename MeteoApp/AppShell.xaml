@@ -16,7 +16,7 @@
         <ShellContent Title="{x:Static res:AppResources.TabBlazor}"
                       Icon="html.svg"
                       ContentTemplate="{DataTemplate local:BlazorPage}"/>
-        <ShellContent Title="Impostazioni"
+        <ShellContent Title="{x:Static res:AppResources.Settings}"
                       Icon="settings.svg"
                       ContentTemplate="{DataTemplate local:SettingsPage}"/>
     </TabBar>

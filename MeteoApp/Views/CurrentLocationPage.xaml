@@ -111,7 +111,7 @@
             </Border>
 
             <!-- Data/Ora -->
-            <StackLayout Spacing="4" orientation="Horizontal">
+            <StackLayout Spacing="4" Orientation="Horizontal" HorizontalOptions="Center">
                 <Label Text="{x:Static res:AppResources.LastUpdate}"
                     FontSize="12"
                     TextColor="#AAAAAA"

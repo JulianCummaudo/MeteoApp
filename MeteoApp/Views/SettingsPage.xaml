@@ -3,28 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:res="clr-namespace:MeteoApp.Resources.Strings"
              x:Class="MeteoApp.SettingsPage"
-             Title="Impostazioni">
-
+             Title="{x:Static res:AppResources.Settings}">
     <ScrollView>
-        <VerticalStackLayout Spacing="8">
-            <Label Text="Lingua"
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="#333333"/>
+        <VerticalStackLayout Padding="24"
+                             Spacing="16">
+            <Label Text="{x:Static res:AppResources.Language}"
+                   FontSize="20"
+                   FontAttributes="Bold"/>
 
-            <Picker x:Name="LanguagePicker"
-                    ItemsSource="{Binding Languages}"
-                    ItemDisplayBinding="{Binding Name}"
-                    SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
-                    BackgroundColor="#f5f5f5"
-                    TextColor="#333333"
-                    Title="Seleziona lingua"/>
+            <Border Stroke="Transparent"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#5a87e0d0"
+                    Padding="16">
+                <VerticalStackLayout Spacing="8">
+                    <Picker x:Name="LanguagePicker"
+                            ItemsSource="{Binding Languages}"
+                            ItemDisplayBinding="{Binding Name}"
+                            SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
+                            Title="{x:Static res:AppResources.SelectLanguage}"/>
+                    <Label Text="{x:Static res:AppResources.SelectLanguageHint}"
+                           FontSize="12"
+                           TextColor="#888888"/>
+                </VerticalStackLayout>
+            </Border>
 
-            <Label Text="Seleziona la lingua"
-                   FontSize="12"
-                   TextColor="#888888"
-                   Margin="0,8,0,0"/>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

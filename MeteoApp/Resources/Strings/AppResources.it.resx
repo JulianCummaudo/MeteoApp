@@ -111,4 +111,16 @@
   <data name="TemperatureAlertTitle" xml:space="preserve">
     <value>Avviso Temperatura</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Impostazioni</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lingua</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Seleziona Lingua</value>
+  </data>
+  <data name="SelectLanguageHint" xml:space="preserve">
+    <value>Scegli la tua lingua preferita per l'interfaccia dell'app.</value>
+  </data>
 </root>

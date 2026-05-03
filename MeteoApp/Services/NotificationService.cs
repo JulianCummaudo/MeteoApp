@@ -11,7 +11,7 @@ public class LocalNotificationsService
     private static readonly double TEMP_MAX = 30.0;
     public static readonly string CHANNEL_ID = "meteo-notifications";
 
-    public async Task CheckAndNotifyAsync(int cityId, string cityName, double temperature)
+    public async Task CheckAndNotifyAsync(string cityId, string cityName, double temperature)
     {
         string? message = null;
 
@@ -24,7 +24,7 @@ public class LocalNotificationsService
             await SendNotificationAsync(cityId, "Allerta Temperatura", message);
     }
 
-    private async Task SendNotificationAsync(int cityId, string title, string message)
+    private async Task SendNotificationAsync(string cityId, string title, string message)
     {
         var context = Android.App.Application.Context;
         var mNotificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService)!;
@@ -33,9 +33,10 @@ public class LocalNotificationsService
         intent.SetFlags(ActivityFlags.SingleTop | ActivityFlags.ClearTop);
         intent.PutExtra("cityId", cityId);
 
+        
         var pi = PendingIntent.GetActivity(
             context,
-            cityId,
+            cityId.GetHashCode(),
             intent,
             PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable
         );
@@ -48,6 +49,6 @@ public class LocalNotificationsService
             .SetAutoCancel(true)
             .SetContentIntent(pi);
 
-        mNotificationManager.Notify(cityId, mBuilder.Build());
+        mNotificationManager.Notify(new Random().Next(1,9999), mBuilder.Build());
     }
 }

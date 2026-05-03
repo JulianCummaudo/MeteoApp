@@ -48,8 +48,8 @@ namespace MeteoApp
 
             FirebaseCloudMessagingImplementation.OnNewIntent(intent);
 
-            var cityId = intent.GetIntExtra("cityId", -1);
-            if (cityId == -1)
+            var cityId = intent.GetStringExtra("cityId") ?? "-1";
+            if (cityId == "-1")
                 return;
 
             MainThread.BeginInvokeOnMainThread(async () =>
@@ -58,7 +58,7 @@ namespace MeteoApp
             });
         }
 
-        private async Task NavigateToCityDetails(int cityId)
+        private async Task NavigateToCityDetails(string cityId)
         {
             var city = await _databaseService.GetEntryByIdAsync(cityId);
             if (city == null)
@@ -94,11 +94,11 @@ namespace MeteoApp
             );
 
             // Test for notifications as soon as the app is opened
-            // var oneTimeRequest = new OneTimeWorkRequest.Builder(Java.Lang.Class.FromType(typeof(MeteoWorker)))
-            //     .SetConstraints(constraints)
-            //     .SetInitialDelay(10, TimeUnit.Seconds)
-            //     .Build();
-            // WorkManager.GetInstance(this).Enqueue(oneTimeRequest);
+            var oneTimeRequest = new OneTimeWorkRequest.Builder(Java.Lang.Class.FromType(typeof(MeteoWorker)))
+                .SetConstraints(constraints)
+                .SetInitialDelay(10, TimeUnit.Seconds)
+                .Build();
+            WorkManager.GetInstance(this).Enqueue(oneTimeRequest);
         }
 
         private void CreateNotificationChannelIfNeeded()

@@ -29,7 +29,7 @@ public class DatabaseService
         return await _database.Table<CityEntry>().ToListAsync();
     }
 
-    public async Task<CityEntry> GetEntryByIdAsync(int id)
+    public async Task<CityEntry> GetEntryByIdAsync(string id)
     {
         if (_database == null)
             await InitAsync();

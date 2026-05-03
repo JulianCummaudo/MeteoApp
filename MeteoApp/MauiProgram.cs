@@ -1,6 +1,6 @@
 ﻿using MeteoApp.ViewModels;
 using Microsoft.Extensions.Logging;
-
+using MeteoApp.Services;
 namespace MeteoApp;
 
 public static class MauiProgram
@@ -29,6 +29,7 @@ public static class MauiProgram
 
 		// Blazor
 		builder.Services.AddMauiBlazorWebView();
+		builder.Services.AddSingleton<MeteoService>();
 
 #if DEBUG
 		builder.Logging.AddDebug();
